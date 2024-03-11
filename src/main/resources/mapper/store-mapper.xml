@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--Dao 이름-->
+<mapper namespace="com.web.store.dao.StoreDao">
+
+    <!-- 가게 저장(insert) -->
+    <insert id="insertStore" parameterType="com.web.store.entity.Store">
+        insert
+            into
+        store
+        (ucSeq,
+        mainTitle,
+        gugunNm,
+        addr1,
+        cntctTel,
+        usageDayWeekAndTime,
+        reprsntvMenu,
+        mainImgNormal,
+        mainImgThumb,
+        itemCntnts,
+        lat,
+        lng)
+        values
+            (#{ucSeq}, #{mainTitle}, #{gugunNm},  #{addr1}, #{cntctTel}, #{usageDayWeekAndTime},  #{reprsntvMenu},
+             #{mainImgNormal}, #{mainImgThumb}, #{itemCntnts}, #{lat}, #{lng})
+    </insert>
+
+    <!-- 가게 총 개수 조회 -->
+    <select id="selectListCount" resultType="int">
+        select
+            count(*)
+        from
+            store;
+    </select>
+
+
+    <!-- 가게 정보 select -->
+    <select id="selectStoreList" resultType="com.web.store.entity.Store">
+        select
+                *
+        from
+                store;
+    </select>
+
+
+
+    <!-- 가게 상세 정보 select -->
+    <select id="selectStoreDetail" parameterType="int" resultType="com.web.store.entity.Store">
+        select * from store where ucSeq=#{ucSeq};
+    </select>
+
+
+    <!-- 북마크 추가(insert) -->
+    <insert id="insertBookmark" parameterType="com.web.store.entity.Bookmark">
+        insert
+            into
+            bookmark(user_userId, store_ucSeq)
+            values(#{user_userId}, #{store_ucSeq});
+    </insert>
+
+    <!-- 북마크 삭제(elete) -->
+    <delete id="deleteBookmark" parameterType="com.web.store.entity.Bookmark">
+        DELETE
+        FROM bookmark
+        WHERE user_userId=#{user_userId} AND store_ucSeq=#{store_ucSeq};
+
+    </delete>
+
+
+    <!-- 북마크 select -->
+    <select id="selectBookmarkList" resultType="com.web.store.entity.Bookmark">
+        select * from bookmark
+        where user_userId=#{user_userId};
+    </select>
+
+    <!-- 북마크-상점 select -->
+    <select id="selectBookmarkStore" resultType="com.web.store.dto.BookmarkDto">
+        SELECT b.user_userId, s.*
+        FROM bookmark b
+        JOIN store s ON b.store_ucSeq = s.ucSeq
+        where user_userId=#{user_userId};
+    </select>
+
+
+
+    <select id="checkBookmark" parameterType="com.web.store.dto.BookmarkCheckDto" resultType="int">
+        SELECT COUNT(*) FROM bookmark
+        WHERE user_userId=#{userId}
+        AND store_ucSeq=#{ucSeq}
+    </select>
+
+
+
+
+
+
+
+
+</mapper>

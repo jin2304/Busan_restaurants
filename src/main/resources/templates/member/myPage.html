@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <title>myPage</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div sec:authorize="isAuthenticated()">
+  <h1 th:text="'환영합니다, ' + ${#authentication.name} + '님'"></h1>
+  <h1 th:text="'환영합니다, ' + ${#authentication.principal.userId} + '님'"></h1>
+  <!--<h1 th:text="'환영합니다, ' + ${#authentication.principal.username} + '님'"></h1>-->
+  <!-- 인증된 사용자를 위한 추가적인 컨텐츠를 포함시킵니다. -->
+</div>
+
+
+<div class="w-full py-6">
+  <div class="container grid items-start justify-center gap-6 px-4 text-center md:grid-cols-3 md:items-center md:justify-start md:gap-8 md:px-6 lg:gap-12">
+    <div class="flex items-center justify-center md:col-span-1 md:justify-end">
+      <img
+              src="https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzAzMjZfMjUx%2FMDAxNjc5ODM0MzkxNzg5.SomK3qflKEf0ugQ9HqeikVETiazukyq1aNgj767ZXMMg.d9xeVYIkSi5cL39Zv658_wFaZAWBjQSiApP9Dap3wdgg.PNG.npay1%2F20230326%25A3%25DF213901%25A3%25DF832.png&type=sc960_832"
+              width="160"
+              height="160"
+              alt="Profile Picture"
+              class="rounded-full"
+              style="aspect-ratio: 160 / 160; object-fit: cover;"
+      />
+    </div>
+    <div class="space-y-4 md:col-span-2 md:text-left">
+      <div class="space-y-2">
+        <h2 class="text-2xl font-bold tracking-tighter sm:text-3xl" th:text="${#authentication.name}">About Me</h2>
+        <p class="text-gray-500 md:w-2/3 dark:text-gray-400">
+          Passionate about web development and creating beautiful, user-friendly websites.
+        </p>
+      </div>
+
+      <div class="space-y-4">
+        <dl class="grid grid-cols-2 gap-2 text-sm md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 dark:text-gray-400">
+          <div class="font-medium">Name</div>
+          <div class="text-right" th:text="${#authentication.name}">Jane Doe</div>
+
+          <div class="font-medium">Email</div>
+          <div class="text-right">jane@example.com</div>
+
+          <div class="font-medium">Location</div>
+          <div class="text-right">New York, NY</div>
+
+          <div class="font-medium">Website</div>
+          <div class="text-right">janedoe.com</div>
+        </dl>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--
+// v0 by Vercel.
+// https://v0.dev/t/sYTHegSSoLQ
+-->
+<div class="max-w-6xl mx-auto px-6 py-12">
+  <section class="text-center">
+    <h2 class="text-2xl font-semibold mb-6">— About Wavvy</h2>
+    <p class="text-xl mb-12">
+      맛집 북마크 리스트
+    </p>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+      <div th:each="store:${bookmarkStores}" class="relative">
+
+        <div class="relative">
+          <img
+                  th:src="${store.mainImgThumb}"
+                  alt="Team member working"
+                  class="w-full h-auto"
+                  width="300"
+                  height="200"
+                  style="aspect-ratio: 300 / 200; object-fit: cover;"
+          />
+          <div class="absolute bottom-0 right-0 bg-white bg-white bg-opacity-50 p-2">
+            <span th:text="${store.mainTitle}">Store Name</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+</div>
+
+
+
+</body>
+</html>

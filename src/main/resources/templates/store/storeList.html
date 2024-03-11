@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <title>부산맛집</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+
+  <style>
+      /* 페이징 스타일 */
+      .pagination-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px; /* 필요에 따라 조절하세요 */
+      }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            list-style-type: none;
+            padding: 0;
+        }
+        .pagination li {
+            margin: 0 5px;
+        }
+        .pagination li a {
+            text-decoration: none;
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            background-color: #f9f9f9;
+        }
+        .pagination li.active a {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+
+       /* 북마크 아이콘 스타일 */
+      .bookmark {
+        width: 0;
+        height: 0;
+        border: solid transparent;
+        border-width: 0 15px 30px 15px;
+        border-color: transparent transparent #ffc107 transparent;
+        position: relative;
+      }
+
+      .bookmark:before {
+        content: '';
+        position: absolute;
+        top: -25px;
+        left: -15px;
+        border: solid transparent;
+        border-width: 0 15px 30px 15px;
+        border-color: transparent transparent white transparent;
+      }
+
+      .bookmark:after {
+        content: '';
+        position: absolute;
+        top: -25px;
+        left: -15px;
+        border: solid transparent;
+        border-width: 0 15px 30px 15px;
+        border-color: transparent transparent #ffc107 transparent;
+      }
+
+      /* 아이콘을 이미지 우측 상단에 겹치게 하는 CSS */
+      .bookmark-overlay {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+      }
+
+
+
+
+
+
+        .rounded-lg .button-container svg{
+            display: none;
+        }
+
+        .rounded-lg:hover .button-container svg{
+            display: block;
+        }
+
+
+
+
+            </style>
+</head>
+
+
+<body>
+
+<!--navBar -->
+<!--<div class="flex justify-between items-center px-6 py-3 bg-black text-white">
+
+
+  <div class="flex text-3xl font-bold">
+    <span class="text-purple-500" style="margin-left:2.4rem;">부산</span>맛집
+
+    &lt;!&ndash; searchBar &ndash;&gt;
+    <div class="relative" style="margin-left:1rem;">
+        <span class="absolute inset-y-0 left-3 flex items-center pl-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 text-gray-500">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.3-4.3"></path>
+            </svg>
+        </span>
+      <input class="flex h-10 w-full border border-input px-3 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pl-10 pr-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 focus:outline-none focus:bg-white dark:focus:bg-gray-900" placeholder="Search" type="search">
+    </div>
+  </div>
+
+
+
+
+  <nav class="flex items-center">
+    <ul class="flex space-x-4">
+      <li><a href="#" class="hover:underline">홈</a></li>
+      <li><a href="#" class="hover:underline">서비스</a></li>
+      <li><a href="#" class="hover:underline">회원가입</a></li>
+      <li><a href="#" class="hover:underline">로그인</a></li>
+    </ul>
+  </nav>
+</div>-->
+
+
+
+
+<!-- navBar -->
+<!--<div class="w-full bg-black text-white dark:bg-gray-800" >-->
+<div class="w-full bg-black text-white">
+  <!--<div class="container mx-auto px-6 py-3 md:flex md:justify-between md:items-center" style="margin-left:0px; margin-right:100px;">-->
+  <div class="container mx-auto px-6 py-3 flex justify-between items-center" style="">
+
+    <div class="flex justify-between items-center">
+      <div >
+        <a href="#"  class="dark:text-white text-2xl font-bold md:text-3xl hover:text-gray-700 dark:hover:text-gray-300">
+          <span class="text-purple-500">부산</span>맛집
+        </a>
+      </div>
+
+      <div class="flex items-center space-x-3">
+        <!-- 여기에 검색창과 로그인 버튼이 있는 부분을 넣으세요 -->
+        <div class="relative" style="margin-left:1.5rem;">
+                <span class="absolute inset-y-0 left-3 flex items-center pl-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 text-gray-500">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.3-4.3"></path>
+                    </svg>
+                </span>
+          <input  style="color:black;" class="flex h-10 w-full border border-input px-3 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pl-10 pr-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 focus:outline-none focus:bg-white dark:focus:bg-gray-900" placeholder="Search" type="search">
+        </div>
+
+        <!--<button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
+          Login</button>-->
+      </div>
+    </div>
+    <nav class="hidden md:flex space-x-10 ml-auto">
+      <!-- 네비게이션 링크들 -->
+      <a class="dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200" href="#">Home</a>
+      <!--
+            <a class="dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200" th:href="@{|/myPage/${#authentication.name}|}">myPage</a>
+      -->
+      <a class="dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200" th:href="@{/myPage}">myPage</a>
+      <a class="dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200" href="/login">로그인</a>
+      <a class="dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200" href="/logout">로그아웃</a>
+      <a class="dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200" href="/join">회원가입</a>
+    </nav>
+
+    <div class="flex md:hidden">
+      <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 w-10">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
+          <line x1="4" x2="20" y1="12" y2="12"></line>
+          <line x1="4" x2="20" y1="6" y2="6"></line>
+          <line x1="4" x2="20" y1="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+</div>
+
+
+
+<div sec:authorize="isAnonymous()">
+  <h1>로그인이 필요합니다.</h1>
+  <!-- 여기에 로그인 폼 또는 다른 인증 관련 링크를 포함시킵니다. -->
+</div>
+
+<div sec:authorize="isAuthenticated()">
+  <h1 th:text="'환영합니다, ' + ${#authentication.name} + '님'"></h1>
+  <h1 th:text="'환영합니다, ' + ${#authentication.principal.userId} + '님'"></h1>
+  <!--<h1 th:text="'환영합니다, ' + ${#authentication.principal.username} + '님'"></h1>-->
+
+
+  <!-- 인증된 사용자를 위한 추가적인 컨텐츠를 포함시킵니다. -->
+  <script>
+        window.onload = function() {
+            const userId = [[${#authentication.principal.userId}]];
+            console.log(userId);
+            findAllBookmark(userId);
+        };
+    </script>
+</div>
+
+
+
+
+
+<!--
+main
+// v0 by Vercel.
+// https://v0.dev/t/4AHgfaBXypT
+-->
+
+<div  class="w-full max-w-6xl mx-auto px-4" style="margin-top: 4rem">
+
+
+
+  <!----  메인  ---->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"   >
+
+    <div th:each="store:${stores}" class="rounded-lg border bg-card text-card-foreground shadow-sm w-full md:aspect-card" data-v0-t="card" th:data-store-id="${store.ucSeq}">
+      <div class="grid-cols-3 items-start gap-4 p-4">
+        <!--<div class="grid grid-cols-3 items-start gap-4 p-4">-->
+        <!--<div class="flex flex-col space-y-2 justify-end">-->
+        <div class="flex flex-col space-y-2 justify-end">
+          <!-- 이미지 컨테이너에 클래스 추가 -->
+          <!--<div class="img-container" style="">-->
+
+
+          <!-- 2북마크(즐겨찾기) -->
+          <!--    <div style="display: flex; justify-content: flex-end; position: relative;">
+                <button type="button"  th:onclick="|addBookmark(${store.ucSeq})|">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#FFD700" class="bi bi-bookmark-fill" viewBox="0 0 16 16" style="position: absolute; top: 0; right: 0; z-index: 1;">
+                  <path d="M2 2v13.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2"/>
+                </svg>
+                </button>
+              </div>
+    -->
+
+          <!--1북마크(즐겨찾기) -->
+          <div class="button-container" style="display: flex; justify-content: flex-end; position: relative;">
+
+            <button class="bookmark-button" type="button"  th:onclick="|toggleBookmark(${store.ucSeq})|">
+
+              <!--북마크 안되었을때 이미지-->
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-bookmark" viewBox="0 0 16 16" style="">
+                <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1z"/>
+              </svg>
+
+
+
+              <!--북마크 되었을때 이미지-->
+              <!--<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#FFD700" class="bi bi-bookmark-fill" viewBox="0 0 16 16" style="position: absolute; top: 0; right: 0; z-index: 1;">
+                <path d="M2 2v13.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2"/>
+              </svg>-->
+            </button>
+          </div>
+
+
+
+
+
+
+
+
+
+          <a href="#" th:href="@{/store/storeDetail?ucSeq={ucSeq}(ucSeq=${store.ucSeq})}">
+            <!-- th:href="@{/board/boardDetail?boardId={boardId}(boardId=${l.boardId})}-->
+
+            <img
+                    alt="Card"
+                    class="rounded-md max-w-full h-auto max-h-full h-auto"
+                    height="100"
+                    th:src="${store.mainImgNormal}"
+                    style=" height:9rem;<!--aspect-ratio:250/250;object-fit:cover;-->"
+
+            />
+          </a>
+        </div>
+
+        <!--       <button class="inline-flex items-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-9 rounded-md px-3 justify-center">
+                 View
+               </button>-->
+        <!-- </div>-->
+        <div class="flex flex-col space-y-2 col-span-2">
+          <div>
+            <!-- 텍스트 컨테이너에 클래스 추가 -->
+            <div class="text-container" style="<!--text-align:right;-->">
+              <div th:text="${store.mainTitle}" class="text-xl font-bold">Black Lotus</div>
+              <div th:text="${store.reprsntvMenu}"class="text-sm font-bold">$1,000</div>
+              <div th:text="${store.gugunNm}" class="text-sm text-gray-500 dark:text-gray-400">Unlimited Edition</div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- 페이징 -->
+
+  <div class="pagination-container">
+    <ul class="pagination">
+      <!-- 이전 -->
+      <li th:if="${pageInfo.currentPage == 1}">
+        <a href="#" class="disabled">&laquo; 이전</a>
+      </li>
+      <li th:unless="${pageInfo.currentPage == 1}">
+        <a th:href="@{ '/store/storeList?cPage=' + ${pageInfo.currentPage - 1}}">&laquo; 이전</a>
+      </li>
+
+      <!-- 페이징 바 -->
+      <li th:each="page:${#numbers.sequence(pageInfo.startPage, pageInfo.endPage)}">
+        <a th:href="@{/store/storeList(cPage=${page})}" th:text="${page}"></a>
+      </li>
+
+
+      <!-- 다음 -->
+      <li th:if="${pageInfo.currentPage == pageInfo.maxPage}">
+        <a href="#" class="disabled">다음 &raquo;</a>
+      </li>
+      <li th:unless="${pageInfo.currentPage == pageInfo.maxPage}">
+        <a th:href="@{ '/store/storeList?cPage=' + ${pageInfo.currentPage + 1}}">다음 &raquo;</a>
+      </li>
+    </ul>
+  </div>
+</div>
+</body>
+
+
+
+
+
+
+<script th:inline="javascript">
+
+
+              // 북마크 API 호출
+              function getBookmarkJson(uri) {
+                  let json = {};
+
+                  $.ajax({
+                      url: uri,
+                      type: 'GET',
+                      dataType: 'json',
+                      async: false,
+                        success: function(response) {
+                            console.log("success");
+                            json = response;
+                        },
+                        error: function(xhr, status, error) { //xhr :XMLHttpRequest(XHR)
+                        if (xhr.status === 401) { // 401 Unauthorized: 로그인되지 않은 경우
+                            // 로그인 페이지로 리다이렉션
+                            window.location.href = "/login";
+                        } else {
+                            // 다른 오류 발생 시 처리
+                            //console.error("오류 발생: " + status + ", " + error);
+                            console.error("오류 발생:" + error);
+                        }
+        }
+                  });
+                  return json;
+              }
+
+
+
+              // 전체 북마크 조회
+              function findAllBookmark(userId) {
+
+                  // 2. API 호출
+                  const response = getBookmarkJson("/store/bookmark/list/" + userId);
+
+                  // 3. 로직 종료
+                  if (!response.length) {
+                      return false;
+                  }
+                    //console.log(response);
+
+
+                  // 모든 가게 아이디 가져오기
+                  const storeItems = document.querySelectorAll('[data-store-id]');
+                  // 사용자가 북마크한 상점의 ID 목록 생성
+                  const bookmarkedStoreIds = response.map(item => item.store_ucSeq);
+
+
+                    storeItems.forEach(item => {
+                        const storeId = item.getAttribute('data-store-id');     //const storeId = item.dataset.storeId;
+
+                        // 사용자가 북마크한 상점인지 확인
+                        if (bookmarkedStoreIds.includes(parseInt(storeId))) {
+
+                            // 아이콘 색상 변경
+                            const bookmarkIcon = item.querySelector('.bi-bookmark');
+                            if (bookmarkIcon) {
+                                bookmarkIcon.innerHTML = '<path d="M2 2v13.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2"/>'
+                                bookmarkIcon.style.fill = '#FFD700';
+
+                                // 현재 요소의 부모인 .rounded-lg 요소를 찾아서 그 안에 있는 .button-container의 svg 요소 찾음
+                                const svg = item.closest('.rounded-lg').querySelector('.button-container svg');
+                                svg.style.display = 'block';
+                            }
+                        }
+                    });
+
+
+              }
+
+
+
+
+              // 북마크 추가/제거
+              function toggleBookmark(storeId) {
+
+                  //사용자가 북마크 했는지 안했는지 체크
+                  const uri = "/store/bookmark/check/" + storeId; // 서버에 해당 아이템이 북마크되어 있는지 확인하는 요청
+                  const response = getBookmarkJson(uri);
+
+
+
+                  //북마크했다면 북마크 삭제
+
+                  if (response == 0) {
+                      //북마크 추가
+                      const uri = "/store/bookmark/toggle/" + storeId;
+                      const response = getBookmarkJson(uri);
+                      console.log('response: ' + response);
+
+                      // 북마크 추가 성공 시 아이콘 색상 및 모양 변경
+                      const bookmarkIcon = document.querySelector(`[data-store-id="${storeId}"] .bi-bookmark`);
+                      bookmarkIcon.innerHTML = '<path d="M2 2v13.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2"/>';
+                      bookmarkIcon.style.display = 'block';
+                      bookmarkIcon.style.fill = '#FFD700';
+
+                      //마우스 hover, 북마크 모양 유지
+                      const storeItem = document.querySelector(`[data-store-id="${storeId}"]`);
+                      storeItem.addEventListener('mouseenter', function() {
+                          bookmarkIcon.style.display = 'block';
+                      });
+                      //마우스가 떠났을 때, 북마크 모양 유지
+                      storeItem.addEventListener('mouseleave', function() {
+                          bookmarkIcon.style.display = 'block';
+                      });
+
+
+
+                  } else {
+                      //북마크 삭제
+                      const uri = "/store/bookmark/delete/" + storeId;
+                      const response = getBookmarkJson(uri);
+                      console.log('response: ' + response);
+
+                     // 북마크 제거 성공 시 아이콘 색상 및 모양 변경
+                     const bookmarkIcon = document.querySelector(`[data-store-id="${storeId}"] .bi-bookmark`);
+                     bookmarkIcon.innerHTML = '<path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1z"/>';
+                     //bookmarkIcon.style.display = 'none';
+                     bookmarkIcon.style.fill = 'currentColor';
+
+
+                      //마우스 hover, 북마크 추가 모양 표시
+                      const storeItem = document.querySelector(`[data-store-id="${storeId}"]`);
+                      storeItem.addEventListener('mouseenter', function() {
+                          const bookmarkIcon = storeItem.querySelector('.bi-bookmark');
+                          bookmarkIcon.style.display = 'block';
+                      });
+
+                      //마우스가 떠났을 때, 북마크 모양 숨김
+                      storeItem.addEventListener('mouseleave', function() {
+                          const bookmarkIcon = storeItem.querySelector('.bi-bookmark');
+                          bookmarkIcon.style.display = 'none';
+                      });
+                  }
+
+
+
+
+              }
+
+
+
+          </script>
+
+
+</html>
+
+
+
+
