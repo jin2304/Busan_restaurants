@@ -206,7 +206,7 @@
             console.log(userId);
             findAllBookmark(userId);
         };
-    </script>
+  </script>
 </div>
 
 
@@ -345,6 +345,30 @@ main
 <script th:inline="javascript">
 
 
+
+              async function getBookmarkJsonV2(uri) {
+                try {
+                    const response = await $.ajax({
+                        url: uri,
+                        type: 'GET',
+                        dataType: 'json'
+                    });
+
+                    return response;
+                } catch (error) {
+                    if (error.status === 401) {
+                        // 401 Unauthorized: 로그인되지 않은 경우
+                        window.location.href = "/login";
+                    } else {
+                        // 다른 오류 발생 시 처리
+                        console.error("오류 발생:", error);
+                    }
+                    throw error; // 에러를 다시 던져서 호출자에게 알림
+                }
+            }
+
+
+
               //(Asynchronous(비동기) 북마크 API 호출
               function getBookmarkJson(uri) {
                   let json = {};
@@ -353,7 +377,7 @@ main
                       url: uri,
                       type: 'GET',
                       dataType: 'json',
-                      async: false,
+                      //async: false,
                         success: function(response) {
                             console.log("success");
                             json = response;
@@ -406,9 +430,51 @@ main
 
 
 
+                // 전체 북마크 조회 V3
+                function findAllBookmark(userId) {
+
+                    // API 호출
+                    getBookmarkJson_a("/store/bookmark/list/" + userId)
+                        .then(response => {
+                            // 로직 종료
+                            if (!response.length) {
+                                return false;
+                            }
+
+                            // 모든 가게 아이디 가져오기
+                            const storeItems = document.querySelectorAll('[data-store-id]');
+                            // 사용자가 북마크한 상점의 ID 목록 생성
+                            const bookmarkedStoreIds = response.map(item => item.store_ucSeq);
+
+                            storeItems.forEach(item => {
+                                const storeId = item.getAttribute('data-store-id');
+
+                                // 사용자가 북마크한 상점인지 확인
+                                if (bookmarkedStoreIds.includes(parseInt(storeId))) {
+                                    // 아이콘 색상 변경
+                                    const bookmarkIcon = item.querySelector('.bi-bookmark');
+                                    if (bookmarkIcon) {
+                                        bookmarkIcon.innerHTML = '<path d="M2 2v13.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2"/>';
+                                        bookmarkIcon.style.fill = '#FFD700'; // 노란색 표시
+
+                                        // 수정된 부분: 아이콘을 표시하는 부모 요소인 .rounded-lg 요소를 찾아서 그 안에 있는 .button-container의 svg 요소 찾음
+                                        const svg = item.closest('.rounded-lg').querySelector('.button-container svg');
+                                        svg.style.display = 'block';
+                                    }
+                                }
+                            });
+                        })
+                        .catch(error => {
+                            console.error("오류 발생:", error);
+                        });
+                }
+
+
+
+
 
               // 전체 북마크 조회
-              function findAllBookmark(userId) {
+              function findAllBookmarkV1(userId) {
 
                   // 2. API 호출
                   const response = getBookmarkJson("/store/bookmark/list/" + userId);
@@ -483,8 +549,6 @@ main
                           bookmarkIcon.style.display = 'block';
                       });
 
-
-
                   } else {
                       //북마크 삭제
                       const uri = "/store/bookmark/delete/" + storeId;
@@ -511,6 +575,8 @@ main
                           bookmarkIcon.style.display = 'none';
                       });
                   }
+
+
 
 
 
