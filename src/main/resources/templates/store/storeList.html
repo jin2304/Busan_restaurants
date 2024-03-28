@@ -345,7 +345,7 @@ main
 <script th:inline="javascript">
 
 
-              // 북마크 API 호출
+              //(Asynchronous(비동기) 북마크 API 호출
               function getBookmarkJson(uri) {
                   let json = {};
 
@@ -362,6 +362,7 @@ main
                         if (xhr.status === 401) { // 401 Unauthorized: 로그인되지 않은 경우
                             // 로그인 페이지로 리다이렉션
                             window.location.href = "/login";
+                            return;
                         } else {
                             // 다른 오류 발생 시 처리
                             //console.error("오류 발생: " + status + ", " + error);
@@ -371,6 +372,38 @@ main
                   });
                   return json;
               }
+
+
+
+
+
+              //동기 북마크 API 호출
+              function getBookmarkJson_a(uri) {
+                  return new Promise((resolve, reject) => {
+                      $.ajax({
+                          url: uri,
+                          type: 'GET',
+                          dataType: 'json',
+                          async: false,
+                          success: function(response) {
+                              console.log("success");
+                              resolve(response);
+                          },
+                          error: function(xhr, status, error) { //xhr :XMLHttpRequest(XHR)
+                              if (xhr.status === 401) { // 401 Unauthorized: 로그인되지 않은 경우
+                                  // 로그인 페이지로 리다이렉션
+                                  window.location.href = "/login";
+                              } else {
+                                  // 다른 오류 발생 시 처리
+                                  //console.error("오류 발생: " + status + ", " + error);
+                                  console.error("오류 발생:" + error);
+                              }
+                              reject(error);
+                          }
+                      });
+                  });
+              }
+
 
 
 
@@ -418,17 +451,16 @@ main
 
 
 
-              // 북마크 추가/제거
-              function toggleBookmark(storeId) {
+              //(비동기) 북마크 추가/제거
+              async function toggleBookmark(storeId) {
 
                   //사용자가 북마크 했는지 안했는지 체크
                   const uri = "/store/bookmark/check/" + storeId; // 서버에 해당 아이템이 북마크되어 있는지 확인하는 요청
-                  const response = getBookmarkJson(uri);
-
+                  const response = await getBookmarkJson_a(uri);
+                  console.log('첫번쨰 response: ' + response);
 
 
                   //북마크했다면 북마크 삭제
-
                   if (response == 0) {
                       //북마크 추가
                       const uri = "/store/bookmark/toggle/" + storeId;

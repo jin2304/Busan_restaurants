@@ -177,6 +177,7 @@ public class StoreController {
         // -> AOP 처리?
         // 현재 사용자의 Authentication 객체 가져오기
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println("authentication = " + authentication);
 
         // 사용자가 로그인되어 있는지 확인
         if (authentication instanceof AnonymousAuthenticationToken) {
@@ -197,7 +198,7 @@ public class StoreController {
         // 해당 유저가 해당 가게를 북마크했는지 여부를 서비스에서 확인하여 반환
         BookmarkCheckDto bookmarkCheckDto = new BookmarkCheckDto(userId,ucSeq);
         System.out.println("bookmarkCheckDto = " + bookmarkCheckDto);
-        
+
         int result = storeService.checkBookmark(bookmarkCheckDto);
         System.out.println("result = " + result);
 
@@ -257,6 +258,20 @@ public class StoreController {
 
         // 사용자의 ID 가져오기
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+
+      /*  // 사용자가 로그인되어 있는지 확인
+        if (authentication instanceof AnonymousAuthenticationToken) {
+            // 사용자가 로그인되지 않은 경우, 로그인 페이지로 리디렉션
+            System.out.println("로그인 되지 않았습니다");
+
+            *//*return 0;*//*
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(0); // 로그인되지 않음을 클라이언트에 반환
+        }*/
+
+
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         int userId = userDetails.getUserId();
 
