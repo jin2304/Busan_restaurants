@@ -168,7 +168,7 @@ public class StoreController {
 
 
     /**
-     * 맛집 북마크 확인
+     * 맛집 북마크 확인  dsdsadsa
      **/
     @ResponseBody
     @GetMapping("/bookmark/check/{ucSeq}")
