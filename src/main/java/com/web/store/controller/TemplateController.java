@@ -13,11 +13,14 @@ public class TemplateController {
     public String template() {
         return "template/fragment/fragmentMain";
     }
+<<<<<<< HEAD
 
     @GetMapping("/layout")
     public String layout() {
         return "template/layout/layoutMain";
     }
+=======
+>>>>>>> 7d6d099 (v2 add TemplateController)
 }
 
 
