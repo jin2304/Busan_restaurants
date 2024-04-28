@@ -5,8 +5,13 @@
   <meta charset="UTF-8">
   <title>myPage</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
 </head>
 <body>
+
+<!-- navbar fragment -->
+<nav th:replace="~{fragment/navbar :: copy}"></nav>
+
 
 <div sec:authorize="isAuthenticated()">
   <h1 th:text="'환영합니다, ' + ${#authentication.name} + '님'"></h1>
@@ -60,6 +65,9 @@
 // v0 by Vercel.
 // https://v0.dev/t/sYTHegSSoLQ
 -->
+
+
+
 <div class="max-w-6xl mx-auto px-6 py-12">
   <section class="text-center">
     <h2 class="text-2xl font-semibold mb-6">— About Wavvy</h2>
