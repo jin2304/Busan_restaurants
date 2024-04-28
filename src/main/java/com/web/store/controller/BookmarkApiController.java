@@ -72,14 +72,10 @@ public class BookmarkApiController {
      **/
     @GetMapping("/bookmark/list/{userId}")
     public List<Bookmark> bookmarkList(@PathVariable final int userId){
-
-        System.out.println("userId = " + userId);
+        //System.out.println("userId = " + userId);
         List<Bookmark> bookmarks = storeService.selectBookmarkList(userId);
-
-
-
-        return bookmarks;
-        /*return ResponseEntity.ok(1);*/
+        return bookmarks; //JSON 형태로 객체 리스트 반환
+        //return ResponseEntity.ok(1);
     }
 
 
@@ -97,9 +93,8 @@ public class BookmarkApiController {
         // 사용자의 ID 가져오기
         int userId = userDetails.getUserId();
 
-
-        System.out.println("서버 북마크 호출됨");
-        System.out.println("userId = " + userId);System.out.println("bookmarkId = " + bookmarkId);
+        //System.out.println("서버 북마크 호출됨");
+        //System.out.println("userId = " + userId);System.out.println("bookmarkId = " + bookmarkId);
 
         Bookmark bookmark = new Bookmark(userId, bookmarkId);
         int result = storeService.insertBookmark(bookmark);
