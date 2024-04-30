@@ -5,9 +5,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-</head>
-
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+</head>
 
 <body>
 <!-- navbar fragment -->
@@ -370,7 +370,7 @@
                               viewBox="0 0 24 24"
                               fill="none"
                               stroke="currentColor"
-                              stroke-width="2"
+                              stroke-width="2"z
                               stroke-linecap="round"
                               stroke-linejoin="round"
                               class="h-6 w-6"
@@ -397,18 +397,248 @@
             </div>
           </div>
         </div>
-        <div class="flex items-center p-4">
+        <div class="flex items-center p-4" style="padding-right: 0px; padding-left: 0px;">
           <div class="flex justify-between items-center">
-            <div class="flex items-center space-x-2">
+         <!--   <div class="flex items-center space-x-2">
               <p class="text-sm font-semibold">Total</p>
               <p class="text-lg font-semibold">$80.00</p>
-            </div>
-            <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
-              Track order
+            </div>-->
+            <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2" type="button"
+                    th:onclick="|addComment(${store.ucSeq})|">
+              후기를 작성해주세요2
             </button>
           </div>
         </div>
       </div>
+
+
+
+            <script th:inline="javascript">
+
+              //(Asynchronous(비동기) 북마크 API 호출
+              function getBookmarkJson(uri) {
+                  let json = {};
+
+                  $.ajax({
+                      url: uri,
+                      type: 'POST',
+                      dataType: 'json',
+                      //async: false,
+                        success: function(response) {
+                            console.log("success");
+                            json = response;
+                        },
+                        error: function(xhr, status, error) { //xhr :XMLHttpRequest(XHR)
+                        if (xhr.status === 401) { // 401 Unauthorized: 로그인되지 않은 경우
+                            // 로그인 페이지로 리다이렉션
+                            window.location.href = "/login";
+                            return;
+                        } else {
+                            // 다른 오류 발생 시 처리
+                            //console.error("오류 발생: " + status + ", " + error);
+                            console.error("오류 발생:" + error);
+                        }
+        }
+                  });
+                  return json;
+              }
+
+      function addComment(storeId){
+
+         const uri = "/store/" + storeId + "/comments";
+         const response = getBookmarkJson(uri);
+         console.log('댓글 response: ' + response)
+
+      }
+
+
+      </script>
+
+      <!-- 댓글 -->
+      <!--
+      // v0 by Vercel.
+      // https://v0.dev/t/766imnmFGDF
+      -->
+
+          <div class="mx-auto max-w-5xl grid gap-4 px-4 md:px-6" style="padding-right: 0px; padding-left: 0px;">
+            <div class="grid gap-4">
+
+
+                <div class="flex items-start gap-4 border-2 border-gray-300 dark:border-gray-700 rounded-md p-4">
+               <span class="relative flex shrink-0 overflow-hidden rounded-full w-10 h-10 border">
+               <span class="flex h-full w-full items-center justify-center rounded-full bg-muted">AL</span>
+               </span>
+                <div class="grid gap-1 text-sm">
+                  <h4 class="font-semibold">Alice Lee</h4>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">
+                    I love the design of this app. The colors are so vibrant and really make the interface pop!
+                  </p>
+                  <div class="flex items-center gap-0.5 text-xs text-gray-500 dark:text-gray-400">
+                    <time>2m</time>
+                    <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground p-0">
+                      <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              class="w-3 h-3"
+                      >
+                        <path d="m9 18 6-6-6-6"></path>
+                      </svg>
+                      Reply
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div data-orientation="horizontal" role="none" class="shrink-0 bg-gray-100 h-[1px] w-full"></div>
+              <div class="flex items-start gap-4">
+      <span class="relative flex shrink-0 overflow-hidden rounded-full w-10 h-10 border">
+        <span class="flex h-full w-full items-center justify-center rounded-full bg-muted">AL</span>
+      </span>
+                <div class="grid gap-1 text-sm">
+                  <h4 class="font-semibold">Bob Johnson</h4>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">
+                    I have to agree! The design is top-notch. Great job to the development team.
+                  </p>
+                  <div class="flex items-center gap-0.5 text-xs text-gray-500 dark:text-gray-400">
+                    <time>5m</time>
+                    <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground p-0">
+                      <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              class="w-3 h-3"
+                      >
+                        <path d="m9 18 6-6-6-6"></path>
+                      </svg>
+                      Reply
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div data-orientation="horizontal" role="none" class="shrink-0 bg-gray-100 h-[1px] w-full"></div>
+
+
+
+
+
+              <div class="flex items-start gap-4 ">
+              <span class="relative flex shrink-0 overflow-hidden rounded-full w-10 h-10 border">
+                <span class="flex h-full w-full items-center justify-center rounded-full bg-muted">AL</span>
+              </span>
+                <div class="grid gap-1 text-sm">
+                  <h4 class="font-semibold">Grace Wilson</h4>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">
+                    Absolutely! The app is not only beautiful but also incredibly intuitive to use. Kudos to the entire team!
+                  </p>
+                  <div class="flex items-center gap-0.5 text-xs text-gray-500 dark:text-gray-400">
+                    <time>10m</time>
+                    <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground p-0">
+                      <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              class="w-3 h-3"
+                      >
+                        <path d="m9 18 6-6-6-6"></path>
+                      </svg>
+                      Reply
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div data-orientation="horizontal" role="none" class="shrink-0 bg-gray-100 h-[1px] w-full"></div>
+              <div class="flex items-start gap-4">
+      <span class="relative flex shrink-0 overflow-hidden rounded-full w-10 h-10 border">
+        <span class="flex h-full w-full items-center justify-center rounded-full bg-muted">AL</span>
+      </span>
+                <div class="grid gap-1 text-sm">
+                  <h4 class="font-semibold">Ella Parker</h4>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">
+                    I'm really impressed with the attention to detail in this app. It's clear that a lot of thought went into
+                    the user experience.
+                  </p>
+                  <div class="flex items-center gap-0.5 text-xs text-gray-500 dark:text-gray-400">
+                    <time>15m</time>
+                    <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground p-0">
+                      <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              class="w-3 h-3"
+                      >
+                        <path d="m9 18 6-6-6-6"></path>
+                      </svg>
+                      Reply
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div data-orientation="horizontal" role="none" class="shrink-0 bg-gray-100 h-[1px] w-full"></div>
+              <div class="flex items-start gap-4">
+      <span class="relative flex shrink-0 overflow-hidden rounded-full w-10 h-10 border">
+        <span class="flex h-full w-full items-center justify-center rounded-full bg-muted">AL</span>
+      </span>
+                <div class="grid gap-1 text-sm">
+                  <h4 class="font-semibold">James Clark</h4>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">
+                    The app looks fantastic! Can't wait to try it out myself.
+                  </p>
+                  <div class="flex items-center gap-0.5 text-xs text-gray-500 dark:text-gray-400">
+                    <time>20m</time>
+                    <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground p-0">
+                      <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              class="w-3 h-3"
+                      >
+                        <path d="m9 18 6-6-6-6"></path>
+                      </svg>
+                      Reply
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div data-orientation="horizontal" role="none" class="shrink-0 bg-gray-100 h-[1px] w-full"></div>
+            </div>
+            <div class="flex justify-center">
+              <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
+                Load more
+              </button>
+            </div>
+          </div>
+
+
 
 
 
@@ -544,6 +774,11 @@
     </div>
   </div>
 </div>
-
+</div>
+</div>
 </body>
+
+
+
+
 </html>
