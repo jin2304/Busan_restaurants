@@ -21,7 +21,7 @@
         where username=#{username}
     </select>
 
-    <select id="findByUserId" parameterType="String" resultType="com.web.store.entity.Member">
+    <select id="findByUserId" parameterType="int" resultType="com.web.store.entity.Member">
         select * from user
         where userId=#{userId}
     </select>
