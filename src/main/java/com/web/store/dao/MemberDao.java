@@ -12,5 +12,6 @@ public interface MemberDao {
 
     public Member findByUsername(String username);
 
+    public Member findByUserId(int userId);
 
 }

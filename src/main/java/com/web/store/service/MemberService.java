@@ -31,9 +31,13 @@ public class MemberService {
     }
 
 
-
     public Member findByUsername(String username){
         return memberDao.findByUsername(username);
+    }
+
+
+    public Member findByUserId(int userId){
+        return memberDao.findByUserId(userId);
     }
 
 }

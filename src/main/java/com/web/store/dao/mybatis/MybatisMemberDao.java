@@ -29,11 +29,15 @@ public class MybatisMemberDao implements MemberDao {
     @Override
     public Member findByUsername(String username) {
         Member findUser = mapper.findByUsername(username);
-        System.out.println("Dao: findUser = " + findUser);
         return findUser;
     }
 
-
+    @Override
+    public Member findByUserId(int userId) {
+        Member findUser = mapper.findByUserId(userId);
+        System.out.println("userId:" + userId);
+        return findUser;
+    }
 
 
 
