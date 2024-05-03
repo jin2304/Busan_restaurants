@@ -6,6 +6,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 
 @Repository
 public class MybatisCommentDao implements CommentDao {
@@ -21,5 +23,10 @@ public class MybatisCommentDao implements CommentDao {
     @Override
     public int insertComment(Comment comment) {
         return mapper.insertComment(comment);
+    }
+
+    @Override
+    public List<Comment> findAllComment(int store_ucSeq) {
+        return mapper.findAllComment(store_ucSeq);
     }
 }

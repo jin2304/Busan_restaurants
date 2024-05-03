@@ -14,6 +14,13 @@
         values(#{user_userId}, #{store_ucSeq}, #{content})
     </insert>
 
+    <select id="findAllComment" resultType="com.web.store.entity.Comment">
+        select *
+        from
+        comment
+        where store_ucSeq=#{store_ucSeq};
+    </select>
+
 </mapper>
 
 

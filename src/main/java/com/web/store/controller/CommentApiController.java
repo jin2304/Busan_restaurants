@@ -1,6 +1,7 @@
 package com.web.store.controller;
 
 //import com.web.store.dto.CommentDto;
+import com.web.store.entity.Bookmark;
 import com.web.store.entity.Member;
 import com.web.store.service.Interface.CommentService;
 import com.web.store.dto.CustomUserDetails;
@@ -14,10 +15,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController //@Controller + @ResponseBody
-@RequestMapping("/store")
 //@RequiredArgsConstructor
 public class CommentApiController {
 
@@ -31,8 +32,10 @@ public class CommentApiController {
     }
 
 
-    //댓글 등록
-    @PostMapping("/{store_ucSeq}/comments") //계층구조는 슬래시(/) -> store안에 댓글 등록
+    /**
+     * 댓글 등록
+     */
+    @PostMapping("store/{store_ucSeq}/comments") //계층구조는 슬래시(/) -> store안에 댓글 등록
     public ResponseEntity<Integer> saveComment(@PathVariable final int store_ucSeq, @RequestBody Map<String, String> requestBody /*@PathVariable final int userId , @RequestBody final CommentDto params*/){
 
         String content = requestBody.get("content");
@@ -72,6 +75,21 @@ public class CommentApiController {
 
         return ResponseEntity.ok(1);
 
+    }
+
+
+    /**
+     * 댓글 조회
+     * */
+    @GetMapping("store/{store_ucSeq}/comments")
+    public List<Comment> findAllComment(@PathVariable final int store_ucSeq){
+        List<Comment> comments = commentService.findAllComment(store_ucSeq);
+
+        for(Comment comment : comments){
+            System.out.println(comment);
+        }
+
+        return comments;//JSON 형태로 객체 리스트 반환
     }
 
 
