@@ -412,48 +412,6 @@
       </div>
 
 
-
-            <script th:inline="javascript">
-
-              //(Asynchronous(비동기) 북마크 API 호출
-              function getBookmarkJson(uri) {
-                  let json = {};
-
-                  $.ajax({
-                      url: uri,
-                      type: 'POST',
-                      dataType: 'json',
-                      //async: false,
-                        success: function(response) {
-                            console.log("success");
-                            json = response;
-                        },
-                        error: function(xhr, status, error) { //xhr :XMLHttpRequest(XHR)
-                        if (xhr.status === 401) { // 401 Unauthorized: 로그인되지 않은 경우
-                            // 로그인 페이지로 리다이렉션
-                            window.location.href = "/login";
-                            return;
-                        } else {
-                            // 다른 오류 발생 시 처리
-                            //console.error("오류 발생: " + status + ", " + error);
-                            console.error("오류 발생:" + error);
-                        }
-        }
-                  });
-                  return json;
-              }
-
-      function addComment(storeId){
-
-         const uri = "/store/" + storeId + "/comments";
-         const response = getBookmarkJson(uri);
-         console.log('댓글 response: ' + response)
-
-      }
-
-
-      </script>
-
       <!-- 댓글 -->
       <!--
       // v0 by Vercel.
@@ -463,12 +421,22 @@
           <div class="mx-auto max-w-5xl grid gap-4 px-4 md:px-6" style="padding-right: 0px; padding-left: 0px;">
             <div class="grid gap-4">
 
+                <!-- Comment form -->
+                <form method="POST" class="border-2 border-gray-300 dark:border-gray-700 rounded-md p-4">
+                    <input type="text" id="commentContent" name="content" placeholder="후기를 등록해주세요." class="w-full border border-gray-300 p-2 rounded-md mb-2">
+                    <button type="button"  th:onclick="|addComment(${store.ucSeq})|" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md float-right">등록</button>
+                    <button type="button" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-md mr-1 float-right">취소</button>
+                    <!--<div style="clear:both;"></div>-->
+                </form>
+
+
 
                 <div class="flex items-start gap-4 border-2 border-gray-300 dark:border-gray-700 rounded-md p-4">
                <span class="relative flex shrink-0 overflow-hidden rounded-full w-10 h-10 border">
                <span class="flex h-full w-full items-center justify-center rounded-full bg-muted">AL</span>
                </span>
-                <div class="grid gap-1 text-sm">
+
+                    <div class="grid gap-1 text-sm">
                   <h4 class="font-semibold">Alice Lee</h4>
                   <p class="text-sm text-gray-500 dark:text-gray-400">
                     I love the design of this app. The colors are so vibrant and really make the interface pop!
@@ -492,10 +460,61 @@
                       </svg>
                       Reply
                     </button>
-                  </div>
+                </div>
                 </div>
               </div>
               <div data-orientation="horizontal" role="none" class="shrink-0 bg-gray-100 h-[1px] w-full"></div>
+
+
+
+
+              <script th:inline="javascript">
+
+              //(Asynchronous(비동기) 북마크 API 호출
+              function getCommentJson(uri, content) {
+                  let json = {};
+                  $.ajax({
+                      url: uri,
+                      type: 'POST',
+                      //dataType: 'json',
+                      contentType: 'application/json',
+                      data: JSON.stringify({content: content}), // 댓글 내용을 JSON 형식으로 전송
+                      //async: false,
+                        success: function(response) {
+                            console.log("댓글이 성공적으로 등록되었습니다.");
+                            document.getElementById('commentContent').value = "";
+                            //json = response;
+                        },
+                        error: function(xhr, status, error) { //xhr :XMLHttpRequest(XHR)
+                        if (xhr.status === 401) { // 401 Unauthorized: 로그인되지 않은 경우
+                            // 로그인 페이지로 리다이렉션
+                            window.location.href = "/login";
+                            return;
+                        } else {
+                            // 다른 오류 발생 시 처리
+                            //console.error("오류 발생: " + status + ", " + error);
+                            console.error("오류 발생:" + error);
+                        }
+        }
+                  });
+                  return json;
+              }
+
+      function addComment(storeId){
+
+         var content = document.getElementById('commentContent').value; // 댓글 내용을 가져옴
+         console.log("댓글 내용:", content);
+
+         const uri = "/store/" + storeId + "/comments";
+         const response = getCommentJson(uri, content);
+         console.log('댓글 response: ' + response)
+
+      }
+
+
+      </script>
+
+
               <div class="flex items-start gap-4">
       <span class="relative flex shrink-0 overflow-hidden rounded-full w-10 h-10 border">
         <span class="flex h-full w-full items-center justify-center rounded-full bg-muted">AL</span>

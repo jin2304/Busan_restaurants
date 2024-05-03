@@ -1,10 +1,11 @@
 package com.web.store.controller;
 
 //import com.web.store.dto.CommentDto;
-import com.web.store.dto.CustomUserDetails;
 import com.web.store.entity.Member;
+import com.web.store.service.Interface.CommentService;
+import com.web.store.dto.CustomUserDetails;
+import com.web.store.entity.Comment;
 import com.web.store.service.MemberService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,23 +14,31 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController //@Controller + @ResponseBody
 @RequestMapping("/store")
 //@RequiredArgsConstructor
 public class CommentApiController {
 
     private final MemberService memberService;
+    private final CommentService commentService;
 
     @Autowired
-    public CommentApiController( MemberService memberService) {
+    public CommentApiController(MemberService memberService, CommentService commentService) {
         this.memberService = memberService;
+        this.commentService = commentService;
     }
+
 
     //댓글 등록
     @PostMapping("/{store_ucSeq}/comments") //계층구조는 슬래시(/) -> store안에 댓글 등록
-    public ResponseEntity<Integer> saveComment(@PathVariable final int store_ucSeq /*@PathVariable final int userId , @RequestBody final CommentDto params*/){
+    public ResponseEntity<Integer> saveComment(@PathVariable final int store_ucSeq, @RequestBody Map<String, String> requestBody /*@PathVariable final int userId , @RequestBody final CommentDto params*/){
 
+        String content = requestBody.get("content");
+        System.out.println("content:" + content);
         System.out.println("store_ucSeq:" + store_ucSeq);
+
         // AOP 처리?
         // 사용자의 ID 가져오기
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -47,12 +56,19 @@ public class CommentApiController {
         // 사용자의 ID 가져오기
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         int userId = userDetails.getUserId();
-        System.out.println("usrId:" +  userId);
+        System.out.println("userId:" +  userId);
 
 
-        //사용자ID로 사용자정보(닉네임) 조회
+
+        //1번 방법
         Member member = memberService.findByUserId(userId);
-        System.out.println("member:" + member);
+        //System.out.println("member:" + member);
+        //Comment comment = new Comment(store_ucSeq, userId, content, member.getNickname());
+        
+        //2번 방법
+        Comment comment = new Comment(userId, store_ucSeq, content);
+
+        int result = commentService.insertComment(comment);
 
         return ResponseEntity.ok(1);
 
@@ -60,4 +76,3 @@ public class CommentApiController {
 
 
 }
-
