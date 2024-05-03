@@ -1,7 +1,7 @@
 package com.web.store.service;
 
 import com.web.store.dao.CommentDao;
-import com.web.store.dao.StoreDao;
+import com.web.store.dto.Response.CommentResponse;
 import com.web.store.entity.Comment;
 import com.web.store.service.Interface.CommentService;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<Comment> findAllComment(int store_ucSeq) {
+    public List<CommentResponse> findAllComment(int store_ucSeq) {
         return commentDao.findAllComment(store_ucSeq);
     }
 }

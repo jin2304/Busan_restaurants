@@ -1,6 +1,7 @@
 package com.web.store.controller;
 
 //import com.web.store.dto.CommentDto;
+import com.web.store.dto.Response.CommentResponse;
 import com.web.store.entity.Bookmark;
 import com.web.store.entity.Member;
 import com.web.store.service.Interface.CommentService;
@@ -82,10 +83,10 @@ public class CommentApiController {
      * 댓글 조회
      * */
     @GetMapping("store/{store_ucSeq}/comments")
-    public List<Comment> findAllComment(@PathVariable final int store_ucSeq){
-        List<Comment> comments = commentService.findAllComment(store_ucSeq);
+    public List<CommentResponse> findAllComment(@PathVariable final int store_ucSeq){
+        List<CommentResponse> comments = commentService.findAllComment(store_ucSeq);
 
-        for(Comment comment : comments){
+        for(CommentResponse comment : comments){
             System.out.println(comment);
         }
 

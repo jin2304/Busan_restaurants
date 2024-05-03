@@ -573,7 +573,48 @@
         comments = response
         console.log(comments);
 
-        } catch (error) {
+        const commentsContainer = document.getElementById('commentsContainer');
+        commentsContainer.innerHTML = ''; // 기존 댓글 삭제
+
+
+        comments.forEach(comment => {
+
+        const commentDiv = document.createElement('div');
+        commentDiv.classList.add('flex', 'items-start', 'gap-4', 'border-2', 'border-gray-300', 'dark:border-gray-700', 'rounded-md', 'p-4');
+
+        const userAvatar = document.createElement('span');
+        userAvatar.classList.add('relative', 'flex', 'shrink-0', 'overflow-hidden', 'rounded-full', 'w-10', 'h-10', 'border');
+        userAvatar.innerHTML = '<span class="flex h-full w-full items-center justify-center rounded-full bg-muted">AL</span>';
+
+
+
+        const commentDetails = document.createElement('div');
+        commentDetails.classList.add('grid', 'gap-1', 'text-sm');
+
+        const username = document.createElement('h4');
+        username.classList.add('font-semibold');
+        username.textContent = comment.username;
+
+        const commentText = document.createElement('p');
+        commentText.classList.add('text-sm', 'text-gray-500', 'dark:text-gray-400');
+        commentText.textContent = comment.content;
+
+        const commentTime = document.createElement('div');
+        commentTime.classList.add('flex', 'items-center', 'gap-0.5', 'text-xs', 'text-gray-500', 'dark:text-gray-400');
+        commentTime.innerHTML = `<time>${comment.time}</time>`;
+
+
+        commentDetails.appendChild(username);
+        commentDetails.appendChild(commentText);
+        commentDetails.appendChild(commentTime);
+
+
+        commentDiv.appendChild(userAvatar);
+        commentDiv.appendChild(commentDetails);
+        commentsContainer.appendChild(commentDiv);
+
+         });
+       } catch (error) {
         console.error("오류 발생:" + error);
         }
 

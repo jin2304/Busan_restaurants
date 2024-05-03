@@ -14,7 +14,7 @@
         values(#{user_userId}, #{store_ucSeq}, #{content})
     </insert>
 
-    <select id="findAllComment" resultType="com.web.store.entity.Comment">
+    <select id="findAllComment" resultType="com.web.store.dto.Response.CommentResponse">
         select *
         from
         comment

@@ -1,6 +1,7 @@
 package com.web.store.dao.mybatis;
 
 import com.web.store.dao.CommentDao;
+import com.web.store.dto.Response.CommentResponse;
 import com.web.store.entity.Comment;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class MybatisCommentDao implements CommentDao {
     }
 
     @Override
-    public List<Comment> findAllComment(int store_ucSeq) {
+    public List<CommentResponse> findAllComment(int store_ucSeq) {
         return mapper.findAllComment(store_ucSeq);
     }
 }
