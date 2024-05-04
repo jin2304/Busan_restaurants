@@ -11,29 +11,20 @@
 
 <body>
 
-<script th:inline="javascript">
-        window.onload = function() {
-            const storeId = [[${store.ucSeq}]];
-            findAllComment(storeId);
-        };
-</script>
 
 <!-- navbar fragment -->
 <nav th:replace="~{fragment/navbar :: copy}"></nav>
 
 
-<!--
-// v0 by Vercel.
-// https://v0.dev/t/xYLWPZdNR6t
--->
 
+<!-- 메인 -->
 <div>
   <div>
     <div class="space-y-6" style="margin:0 auto;max-width:1000px">
       <div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
         <div class="flex flex-col space-y-1.5 p-4">
           <div class="flex items-center space-x-4">
-<!--            <svg
+            <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
                     height="24"
@@ -44,11 +35,11 @@
                     stroke-linecap="round"
                     stroke-linejoin="round"
                     class="h-6 w-6"
-            >rounded-lg border bg-card text-card-foreground shadow-sm
+                    rounded-lg border bg-card text-card-foreground shadow-sm >
               <circle cx="8" cy="21" r="1"></circle>
               <circle cx="19" cy="21" r="1"></circle>
               <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
-            </svg>-->
+            </svg>
             <h2 class="text-lg font-bold tracking-tight">Your order has been placed</h2>
           </div>
         </div>
@@ -59,29 +50,13 @@
                 <div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
                   <div class="flex flex-col space-y-1.5 p-4">
                     <div class="flex items-center space-x-4">
-             <!--         <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="24"
-                              height="24"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              stroke-width="2"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              class="h-6 w-6"
-                      >
-                        <circle cx="8" cy="21" r="1"></circle>
-                        <circle cx="19" cy="21" r="1"></circle>
-                        <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
-                      </svg>-->
                      <!-- <h2 th:text="${store.mainTitle}" class="text-lg font-bold tracking-tight">맛집 이름 </h2>-->
                     </div>
                   </div>
                   <div class="p-4">
 
 
-                  <!-- 시작 -->
+
                     <div class="grid grid-cols-3 gap-4 text-sm">
                       <!-- 첫 번째 열 (이미지) -->
                       <div class="col-span-2">
@@ -146,95 +121,6 @@
                       </div>
                     </div>
 
-
-
-
-
-
-
-                    <!-- <div class="flex items-center space-x-2">
-                       <img
-                               alt="Thumbnail"
-                               class="rounded-md overflow-hidden"
-                               height="64"
-                               src="/placeholder.svg"
-                               style="aspect-ratio:64/64;object-fit:cover"
-                               width="64"
-                       />
-                       <div class="grid gap-0.5">
-                         <h3 class="font-semibold">Crewneck Sweatshirt</h3>
-                         <p class="text-sm text-gray-500 dark:text-gray-400">Soft cotton crewneck sweatshirt</p>
-                       </div>
-                     </div>
-                     <div class="flex items-center space-x-2">
-                       <div class="grid gap-0.5">
-                         <h3 class="font-semibold">Color</h3>
-                         <p>Blue</p>
-                       </div>
-                     </div>
-                     <div class="flex items-center space-x-2">
-                       <div class="grid gap-0.5">
-                         <h3 class="font-semibold">Size</h3>
-                         <p>Medium</p>
-                       </div>
-                     </div>
-                     <div class="flex items-center space-x-2">
-                       <div class="grid gap-0.5">
-                         <h3 class="font-semibold">Quantity</h3>
-                         <p>2</p>
-                       </div>
-                     </div>-->
-                      <!--  <div class="grid gap-0.5">
-                    <h3 th:text="${store.mainTitle}" class="font-semibold"></h3>
-                       <p th:text="${store.itemCntnts}" class="text-sm text-gray-500 dark:text-gray-400"></p>
-                        <p th:text="${store.addr1}" class="text-sm text-gray-500 dark:text-gray-400"></p>
-
-                 </div> -->
-
-
-                    <!-- 메인 레이아웃 2열-->
-                  <!--  <div class="grid grid-cols-2 gap-4 text-sm">
-                      &lt;!&ndash;&#45;&#45;  메인  &#45;&#45;&ndash;&gt;
-                      <div class="flex items-center space-x-2">
-                        <img
-                                alt="맛집 이미지"
-                                class="rounded-md overflow-hidden"
-                                height="400"
-                                th:src="${store.mainImgNormal}"
-                                style="aspect-ratio:320/200;object-fit:cover"
-                        />
-                      </div>
-
-
-                   &lt;!&ndash; &ndash;&gt;
-                  <div class="flex items-center p-4">
-                    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=2204b4bb2b8843221ccb59e6a5fa9157&libraries=services,clusterer,drawing"></script>
-                    <div id="map" style="width:100%;height:350px;"></div>
-
-                    <script th:inline="javascript">
-                          //지도 생성
-                          var mapContainer = document.getElementById('map'),
-
-                          mapOption = {
-                          center: new kakao.maps.LatLng([[${store.lat}]], [[${store.lng}]]), // 지도의 중심좌표
-                          level: 3 // 지도의 확대 레벨
-                          };
-
-                          var map = new kakao.maps.Map(mapContainer, mapOption);
-                        </script>
-
-
-   &lt;!&ndash;                 <div class="flex justify-between items-center">
-                      <div class="flex items-center space-x-2">
-                        <p class="text-sm font-semibold">Total</p>
-                        <p class="text-lg font-semibold">$80.00</p>
-                      </div>
-                      <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
-                        Track order
-                      </button>
-                    </div>
-                  </div>&ndash;&gt;
-                </div>-->
 
                 <!-- 첫번째 -->
                 <div class="grid-cols-2 rounded-lg border bg-card text-card-foreground shadow-sm" style="margin-top: 20px;" data-v0-t="card">
@@ -334,90 +220,12 @@
                   </div>
                 </div>
 
-
-
-
-<!--                <div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
-                  <div class="flex flex-col space-y-1.5 p-4">
-                    <div class="flex items-center space-x-4">
-                      <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="24"
-                              height="24"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              stroke-width="2"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              class="h-6 w-6"
-                      >
-                        <polyline points="20 12 20 22 4 22 4 12"></polyline>
-                        <rect width="20" height="5" x="2" y="7"></rect>
-                        <line x1="12" x2="12" y1="22" y2="7"></line>
-                        <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
-                        <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
-                      </svg>
-                      <h2 class="text-lg font-bold tracking-tight">Special instructions</h2>
-                    </div>
-                  </div>
-                  <div class="p-4">
-                    <p class="text-sm text-gray-500 dark:text-gray-400">Add special instructions to the seller</p>
-                  </div>
-                </div>-->
-
-
-
-<!--                <div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
-                  <div class="flex flex-col space-y-1.5 p-4">
-                    <div class="flex items-center space-x-4">
-                      <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="24"
-                              height="24"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              stroke-width="2"z
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              class="h-6 w-6"
-                      >
-                        <polyline points="20 12 20 22 4 22 4 12"></polyline>
-                        <rect width="20" height="5" x="2" y="7"></rect>
-                        <line x1="12" x2="12" y1="22" y2="7"></line>
-                        <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
-                        <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
-                      </svg>
-                      <h2 class="text-lg font-bold tracking-tight">Special instructions</h2>
-                    </div>
-                  </div>
-                  <div class="p-4">
-                    <p class="text-sm text-gray-500 dark:text-gray-400">Add special instructions to the seller</p>
-                  </div>
-                </div>-->
-
-
-
-
-
               </div>
             </div>
           </div>
         </div>
-        <div class="flex items-center p-4" style="padding-right: 0px; padding-left: 0px;">
-          <div class="flex justify-between items-center">
-         <!--   <div class="flex items-center space-x-2">
-              <p class="text-sm font-semibold">Total</p>
-              <p class="text-lg font-semibold">$80.00</p>
-            </div>-->
-            <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2" type="button"
-                    th:onclick="|addComment(${store.ucSeq})|">
-              후기를 작성해주세요2
-            </button>
-          </div>
-        </div>
       </div>
+
 
 
       <!-- 댓글 -->
@@ -430,21 +238,31 @@
             <div class="grid gap-4">
 
                 <!-- Comment form -->
-                <form method="POST" class="border-2 border-gray-300 dark:border-gray-700 rounded-md p-4">
+                <form id="commentForm" method="POST" class="border-2 border-gray-300 dark:border-gray-700 rounded-md p-4">
                     <input type="text" id="commentContent" name="content" placeholder="후기를 등록해주세요." class="w-full border border-gray-300 p-2 rounded-md mb-2">
-                    <button type="button"  th:onclick="|addComment(${store.ucSeq})|" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md float-right">등록</button>
+                    <button type="button"  id="submitButton" th:onclick="|addComment(${store.ucSeq})|" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md float-right">등록</button>
                     <button type="button" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-md mr-1 float-right">취소</button>
                     <!--<div style="clear:both;"></div>-->
                 </form>
 
-                <!-- 댓글 목록 -->
-                <div id="commentsContainer">
-                        dsad
-                </div>
+
+              <script>
+                  document.getElementById('commentContent').addEventListener('keydown', function(event) {
+                    if (event.key === 'Enter') {
+                        event.preventDefault(); // 폼 제출 방지
+                        document.getElementById('submitButton').click(); // 등록 버튼 클릭 이벤트 실행
+                    }
+                  });
+              </script>
+
+
+              <!-- 댓글 목록(렌더링 부분)-->
+              <div id="commentsContainer">
+              </div>
 
 
 
-               <!-- 댓글 목록 -->
+               <!-- 댓글 목록(렌더링x) -->
               <div class="flex items-start gap-4 border-2 border-gray-300 dark:border-gray-700 rounded-md p-4">
                 <span class="relative flex shrink-0 overflow-hidden rounded-full w-10 h-10 border">
                  <span class="writer_img"><img src="/images/default_profile.png" width="30" height="30" alt="기본 프로필 이미지"/></span>
@@ -472,6 +290,11 @@
 
 
             <script th:inline="javascript">
+
+              window.onload = function() {
+                const storeId = [[${store.ucSeq}]];
+                findAllComment(storeId);
+               };
 
                 //비동기적으로 댓글 등록
                 function postCommentJson(uri, content) {
@@ -600,141 +423,8 @@
       </script>
 
 
-              <div class="flex items-start gap-4">
-      <span class="relative flex shrink-0 overflow-hidden rounded-full w-10 h-10 border">
-        <span class="flex h-full w-full items-center justify-center rounded-full bg-muted">AL</span>
-      </span>
-                <div class="grid gap-1 text-sm">
-                  <h4 class="font-semibold">Bob Johnson</h4>
-                  <p class="text-sm text-gray-500 dark:text-gray-400">
-                    I have to agree! The design is top-notch. Great job to the development team.
-                  </p>
-                  <div class="flex items-center gap-0.5 text-xs text-gray-500 dark:text-gray-400">
-                    <time>5m</time>
-                    <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground p-0">
-                      <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="24"
-                              height="24"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              stroke-width="2"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              class="w-3 h-3"
-                      >
-                        <path d="m9 18 6-6-6-6"></path>
-                      </svg>
-                      Reply
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div data-orientation="horizontal" role="none" class="shrink-0 bg-gray-100 h-[1px] w-full"></div>
 
-
-
-
-
-              <div class="flex items-start gap-4 ">
-              <span class="relative flex shrink-0 overflow-hidden rounded-full w-10 h-10 border">
-                <span class="flex h-full w-full items-center justify-center rounded-full bg-muted">AL</span>
-              </span>
-                <div class="grid gap-1 text-sm">
-                  <h4 class="font-semibold">Grace Wilson</h4>
-                  <p class="text-sm text-gray-500 dark:text-gray-400">
-                    Absolutely! The app is not only beautiful but also incredibly intuitive to use. Kudos to the entire team!
-                  </p>
-                  <div class="flex items-center gap-0.5 text-xs text-gray-500 dark:text-gray-400">
-                    <time>10m</time>
-                    <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground p-0">
-                      <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="24"
-                              height="24"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              stroke-width="2"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              class="w-3 h-3"
-                      >
-                        <path d="m9 18 6-6-6-6"></path>
-                      </svg>
-                      Reply
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div data-orientation="horizontal" role="none" class="shrink-0 bg-gray-100 h-[1px] w-full"></div>
-              <div class="flex items-start gap-4">
-      <span class="relative flex shrink-0 overflow-hidden rounded-full w-10 h-10 border">
-        <span class="flex h-full w-full items-center justify-center rounded-full bg-muted">AL</span>
-      </span>
-                <div class="grid gap-1 text-sm">
-                  <h4 class="font-semibold">Ella Parker</h4>
-                  <p class="text-sm text-gray-500 dark:text-gray-400">
-                    I'm really impressed with the attention to detail in this app. It's clear that a lot of thought went into
-                    the user experience.
-                  </p>
-                  <div class="flex items-center gap-0.5 text-xs text-gray-500 dark:text-gray-400">
-                    <time>15m</time>
-                    <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground p-0">
-                      <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="24"
-                              height="24"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              stroke-width="2"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              class="w-3 h-3"
-                      >
-                        <path d="m9 18 6-6-6-6"></path>
-                      </svg>
-                      Reply
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div data-orientation="horizontal" role="none" class="shrink-0 bg-gray-100 h-[1px] w-full"></div>
-              <div class="flex items-start gap-4">
-      <span class="relative flex shrink-0 overflow-hidden rounded-full w-10 h-10 border">
-        <span class="flex h-full w-full items-center justify-center rounded-full bg-muted">AL</span>
-      </span>
-                <div class="grid gap-1 text-sm">
-                  <h4 class="font-semibold">James Clark</h4>
-                  <p class="text-sm text-gray-500 dark:text-gray-400">
-                    The app looks fantastic! Can't wait to try it out myself.
-                  </p>
-                  <div class="flex items-center gap-0.5 text-xs text-gray-500 dark:text-gray-400">
-                    <time>20m</time>
-                    <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground p-0">
-                      <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="24"
-                              height="24"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              stroke-width="2"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              class="w-3 h-3"
-                      >
-                        <path d="m9 18 6-6-6-6"></path>
-                      </svg>
-                      Reply
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div data-orientation="horizontal" role="none" class="shrink-0 bg-gray-100 h-[1px] w-full"></div>
-            </div>
+           </div>
             <div class="flex justify-center">
               <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
                 Load more

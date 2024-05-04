@@ -18,7 +18,10 @@
         select *
         from
         comment
-        where store_ucSeq=#{store_ucSeq};
+        where
+        store_ucSeq=#{store_ucSeq}
+        ORDER BY
+        created_date DESC;
     </select>
 
 </mapper>
