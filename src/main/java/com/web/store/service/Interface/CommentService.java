@@ -9,4 +9,6 @@ public interface CommentService {
     int insertComment(Comment comment);
 
     List<CommentResponse> findAllComment(int store_ucSeq);
+
+    int deleteComment(int commentId);
 }

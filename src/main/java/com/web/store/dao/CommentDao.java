@@ -10,4 +10,6 @@ public interface CommentDao {
 
     List<CommentResponse> findAllComment(int store_ucSeq);
 
+    int deleteComment(int commentId);
+
 }

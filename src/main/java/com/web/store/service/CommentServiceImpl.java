@@ -29,4 +29,9 @@ public class CommentServiceImpl implements CommentService {
     public List<CommentResponse> findAllComment(int store_ucSeq) {
         return commentDao.findAllComment(store_ucSeq);
     }
+
+    @Override
+    public int deleteComment(int commentId) {
+        return commentDao.deleteComment(commentId);
+    }
 }

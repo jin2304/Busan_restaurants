@@ -411,7 +411,7 @@
                            <button class="inline-flex items-center justify-center text-gray-500 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground p-0">
                             수정
                            </button>
-                           <button class="inline-flex items-center justify-center text-gray-500 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground p-0">
+                           <button type="button" onclick="deleteComment(${comment.commentId});" class="inline-flex items-center justify-center text-gray-500 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground p-0">
                             삭제
                            </button>
                          </div>
@@ -425,6 +425,32 @@
         }
 
       }
+
+      function deleteComment(commentId){
+        if (!confirm('선택하신 댓글을 삭제할까요?')) {
+              return false;
+          }
+
+
+        const ucSeq = [[ ${store.ucSeq} ]];
+
+        $.ajax({
+            url : `/store/${ucSeq}/comments/${commentId}`,
+            type : 'delete',
+            dataType : 'json',
+            async : false,
+            success : function (response) {
+                alert('삭제되었습니다.');
+                findAllComment(ucSeq);
+            },
+            error : function (request, status, error) {
+                console.log(error)
+            }
+        })
+
+      }
+
+
 
       </script>
 

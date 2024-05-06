@@ -24,6 +24,14 @@
         created_date DESC;
     </select>
 
+    <delete id="deleteComment">
+        DELETE
+        FROM
+        comment
+        WHERE
+        commentId=#{commentId};
+    </delete>
+
 </mapper>
 
 

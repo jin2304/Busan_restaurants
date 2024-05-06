@@ -30,4 +30,9 @@ public class MybatisCommentDao implements CommentDao {
     public List<CommentResponse> findAllComment(int store_ucSeq) {
         return mapper.findAllComment(store_ucSeq);
     }
+
+    @Override
+    public int deleteComment(int commentId) {
+        return mapper.deleteComment(commentId);
+    }
 }

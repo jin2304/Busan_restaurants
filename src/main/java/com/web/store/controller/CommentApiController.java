@@ -94,4 +94,17 @@ public class CommentApiController {
     }
 
 
+    /**
+     * 댓글 삭제
+     * */
+    @DeleteMapping("store/{store_ucSeq}/comments/{commentId}")
+    public int deleteComment(@PathVariable final int store_ucSeq, @PathVariable final int commentId) {
+
+        System.out.println(store_ucSeq);
+        System.out.println(commentId);
+        return commentService.deleteComment(commentId);
+    }
+
+
+
 }
