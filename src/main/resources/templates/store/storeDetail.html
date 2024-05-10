@@ -7,7 +7,81 @@
     <title>Title</title>
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script th:src="@{/js/common.js}"></script>
 </head>
+
+<style>
+/* input 정의 */
+input[type="text"], input[type="password"], input[type="button"], input[type="image"], input[type="submit"], input[type="search"], input[type="email"], input[type="url"], input[type="number"], input[type="tel"], input[type="date"], select {width:100%; height:38px; padding:0 10px; margin-bottom:2px;}
+select {padding-right:0;}
+textarea {padding:10px; font-size:15px;}
+input[readonly], select[readonly], textarea[readonly], .readonly, input[disabled], select[disabled], textarea[disabled], .disabled {background:#f4f4f4; border-color:#ddd;} /* 입력불가 */
+.email_in input, .email_in select {width:auto;}
+.addr_in input {margin:1px 0;}
+.addr_in input:first-child {width:100px !important;}
+.addr_in input {width:100%;}
+.addr_in .btns {height:38px; line-height:36px;}
+
+
+/* 테이블 스타일 ------------------------------- */
+.tb {width:100%; border:1px solid #dedede; margin-top:20px;}
+.tb:first-child {margin-top:0;}
+.tb th, .tb td {border:1px solid #dedede; padding:10px 5px; box-sizing:border-box;}
+.tb th {color:#555;}
+
+.tb_col th {border-bottom:1px solid #a2a2a2;}
+.tb_col td {text-align:center;}
+.tb_col thead th {background:#6f8294; border-color:rgba(255,255,255,0.2); color:#fff;}
+.tb_col tbody tr:nth-child(even) {background:#f6f7f8;}
+.tb_col .no_data_msg {padding:50px 0;}
+
+.tb_row {border-top:2px solid #6f8294;}
+.tb_row th, .tb_row td {padding:8px 12px;}
+.tb_row th {background:#f6f7f8; text-align:left;}
+.tb_row td {height:40px;}
+.tb_row .btns {height:38px; line-height:38px;}
+.viewcon {min-height:100px;}
+
+
+/* 필수입력표시 */
+.es {display:inline-block; text-indent:-99999px; background-position:-65px 0; width:6px; height:7px; margin-left:3px; vertical-align:middle; position:relative; top:-2px;}
+/* 필수입력항목 텍스트 */
+.wr_cm_txt {text-align:right;}
+.wr_cm_txt span {display:inline-block; position:relative; padding-left:10px; font-size:12px; color:#888; margin-bottom:10px;}
+.wr_cm_txt span::before {background-position:-65px 0; width:6px; height:7px; position:absolute; top:5px; left:0;}
+
+.scroll_in {display:block; max-width:100%; overflow-x:auto; white-space:nowrap; -webkit-overflow-scrolling:touch;}
+
+/* popup ------------------------------- */
+#popup_wrap h2 {background:#30a0c3; padding:10px 15px; color:#fff; font-size:16px; font-weight:bold;}
+#popup_wrap .btn_close {position:absolute; top:4px; right:5px;}
+#popup_wrap .btn_close button {background:none; border:0; color:#fff; font-size:16px; width:24px; height:24px;}
+#popup_wrap .pop_con {padding:20px;}
+#popup_wrap .pop_con h3 {font-size:34px; margin-top:30px;}
+#popup_wrap .pop_con h3:first-child {margin-top:0px;}
+#modalWriter {width: calc(100% - 20px);}
+
+/* 레이어팝업 */
+.btn_close {display:inline-block; background-color:transparent; border:0; padding:5px;}
+.btn_close span {display:inline-block; font-size:27px;}
+
+.popLayer {overflow: hidden; /* 내부 컨텐츠가 팝업 밖으로 벗어나지 않도록 설정 */}
+.popLayer .btn_close {position:absolute; top:20px; right:15px;}
+.overlay_t {position:fixed; top:0; right:0; bottom:0; left:0; width:100%; height:100%; overflow:auto; padding:15px; box-sizing:border-box; background-color:rgba(0,0,0,0.6); text-align:center; z-index:99;}
+.overlay_t::before {content:""; display:inline-block; height:100%; vertical-align:middle;}
+.popLayer {vertical-align:middle; position:relative; z-index:100; width:100%; max-width:700px; margin:0 auto; padding:10px 30px; background:#fff; border-radius:14px; overflow:hidden; box-shadow:0px 1px 7px rgba(0,0,0,0.4); display:none;}
+.popLayer h3 {color:#222; font-size:20px; margin-top:30px; line-height:1.3; text-align:left;}
+.popLayer em {font-style:normal;}
+.popLayer .pop_container {padding:15px 0;}
+.popLayer .pop_container.scroll_cont {max-height:470px; overflow:auto;}
+.popLayer .pop_container .btn_set {margin:30px 0 0;}
+.popLayer .pop_container .btn_set > button {height:40px; line-height:38px; font-size:15px; min-width:80px;}
+
+.pop_container table.tb_row th,
+.pop_container table.tb_row td {/* 입력 요소들의 너비를 조정하여 팝업의 너비에 맞게 설정 */max-width: 50%; /* 예시로 50%로 설정 */}
+.pop_container table.tb_row textarea {border:1px solid gray; width: calc(100% - 20px); /* 패딩값(10px * 2)을 제외한 나머지 공간을 차지하도록 설정 */}
+
+</style>
 
 <body>
 
@@ -229,11 +303,6 @@
 
 
       <!-- 댓글 -->
-      <!--
-      // v0 by Vercel.
-      // https://v0.dev/t/766imnmFGDF
-      -->
-
           <div class="mx-auto max-w-5xl grid gap-4 px-4 md:px-6" style="padding-right: 0px; padding-left: 0px;">
             <div class="grid gap-4">
 
@@ -262,30 +331,32 @@
 
 
 
-               <!-- 댓글 목록(렌더링x) -->
-              <div class="flex items-start gap-4 border-2 border-gray-300 dark:border-gray-700 rounded-md p-4">
-                <span class="relative flex shrink-0 overflow-hidden rounded-full w-10 h-10 border">
-                 <span class="writer_img"><img src="" width="30" height="30" alt="기본 프로필 이미지"/></span>
-                </span>
-
-               <div class="grid gap-1 text-sm">
-                  <h4 class="font-semibold">Alice Lee</h4>
-
-                  <p class="text-sm text-gray-500 dark:text-gray-400">I love the design of this app. ~</p>
-
-
-                  <div class="flex items-center gap-0.5 text-xs text-gray-500 dark:text-gray-400">
-                    <time>2m</time>
-                    <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground p-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3"><path d="m9 18 6-6-6-6"></path></svg>
-                        Reply
-                    </button>
-                  </div>
-               </div>
+              <!-- 댓글 수정 팝업 -->
+              <div id="commentUpdatePopup" class="popLayer" style="display:none;">
+                <h3>댓글 수정</h3>
+                <div class="pop_container">
+                  <table class="tb tb_row tl">
+                    <colgroup>
+                      <col style="width:30%;" /><col style="width:70%;" />
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                      <th scope="row">작성자<span class="es">필수 입력</span></th>
+                      <td><input type="text" id="modalWriter" name="modalWriter" placeholder="작성자를 입력해 주세요." readonly tabindex="-1"/></td>
+                    </tr>
+                    <tr>
+                      <th scope="row">내용<span class="es">필수 입력</span></th>
+                      <td><textarea id="modalContent" name="modalContent" cols="90" rows="10" placeholder="수정할 내용을 입력해 주세요."></textarea></td>
+                    </tr>
+                    </tbody>
+                  </table>
+                  <p class="btn_set">
+                    <button type="button" id="commentUpdateBtn" class="btns btn_st2">수정</button>
+                    <button type="button" class="btns btn_bdr2" onclick="closeCommentUpdatePopup();">취소</button>
+                  </p>
+                </div>
+                <button type="button" class="btn_close" onclick="closeCommentUpdatePopup();"><span><i class="far fa-times-circle"></i></span></button>
               </div>
-
-              <div data-orientation="horizontal" role="none" class="shrink-0 bg-gray-100 h-[1px] w-full"></div>
-
 
 
 
@@ -408,7 +479,7 @@
 
                         <!-- 수정/삭제 버튼 -->
                          <div>
-                           <button class="inline-flex items-center justify-center text-gray-500 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground p-0">
+                           <button type="button" onclick="openCommentUpdatePopup(${comment.commentId});" class="inline-flex items-center justify-center text-gray-500 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground p-0">
                             수정
                            </button>
                            <button type="button" onclick="deleteComment(${comment.commentId});" class="inline-flex items-center justify-center text-gray-500 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground p-0">
@@ -451,7 +522,34 @@
       }
 
 
+            // 댓글 수정 팝업 열기
+            function openCommentUpdatePopup(commentId) {
 
+                const ucSeq = [[ ${store.ucSeq} ]];
+
+                $.ajax({
+                    url : `/store/${ucSeq}/comments/${commentId}`,
+                    type : 'get',
+                    dataType : 'json',
+                    async : false,
+                    success : function (response) {
+                        document.getElementById('modalWriter').value = response.user_userId;
+                        document.getElementById('modalContent').value = response.content;
+                        document.getElementById('commentUpdateBtn').setAttribute('onclick', `updateComment(${commentId})`);
+                        layerPop('commentUpdatePopup');
+                    },
+                    error : function (request, status, error) {
+                        console.log(error)
+                    }
+                })
+            }
+
+            // 댓글 수정 팝업 닫기
+            function closeCommentUpdatePopup() {
+                document.querySelectorAll('#modalContent, #modalWriter').forEach(element => element.value = '');
+                document.getElementById('commentUpdateBtn').removeAttribute('onclick');
+                layerPopClose('commentUpdatePopup');
+            }
       </script>
 
 

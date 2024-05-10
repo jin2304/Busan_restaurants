@@ -32,6 +32,14 @@
         commentId=#{commentId};
     </delete>
 
+    <select id="findCommentById" resultType="com.web.store.dto.Response.CommentResponse">
+        select *
+        from
+        comment
+        where
+        commentId=#{commentId};
+    </select>
+
 </mapper>
 
 

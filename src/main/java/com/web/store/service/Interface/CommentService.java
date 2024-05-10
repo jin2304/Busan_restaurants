@@ -11,4 +11,6 @@ public interface CommentService {
     List<CommentResponse> findAllComment(int store_ucSeq);
 
     int deleteComment(int commentId);
+
+    CommentResponse findCommentById(int commentId);
 }

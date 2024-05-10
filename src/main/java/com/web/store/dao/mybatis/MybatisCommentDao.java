@@ -35,4 +35,11 @@ public class MybatisCommentDao implements CommentDao {
     public int deleteComment(int commentId) {
         return mapper.deleteComment(commentId);
     }
+
+    @Override
+    public CommentResponse findCommentById(int commentId) {
+        return mapper.findCommentById(commentId);
+    }
+
+
 }

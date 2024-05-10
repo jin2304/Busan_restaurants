@@ -34,4 +34,9 @@ public class CommentServiceImpl implements CommentService {
     public int deleteComment(int commentId) {
         return commentDao.deleteComment(commentId);
     }
+
+    @Override
+    public CommentResponse findCommentById(int commentId) {
+        return commentDao.findCommentById(commentId);
+    }
 }

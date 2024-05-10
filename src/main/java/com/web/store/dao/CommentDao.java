@@ -12,4 +12,5 @@ public interface CommentDao {
 
     int deleteComment(int commentId);
 
+    CommentResponse findCommentById(int commentId);
 }

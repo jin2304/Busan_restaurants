@@ -1,8 +1,8 @@
 package com.web.store.controller;
 
-//import com.web.store.dto.CommentDto;
+
+
 import com.web.store.dto.Response.CommentResponse;
-import com.web.store.entity.Bookmark;
 import com.web.store.entity.Member;
 import com.web.store.service.Interface.CommentService;
 import com.web.store.dto.CustomUserDetails;
@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+
+
 
 @RestController //@Controller + @ResponseBody
 //@RequiredArgsConstructor
@@ -95,7 +97,7 @@ public class CommentApiController {
 
 
     /**
-     * 댓글 삭제
+     * 댓글 삭제*
      * */
     @DeleteMapping("store/{store_ucSeq}/comments/{commentId}")
     public int deleteComment(@PathVariable final int store_ucSeq, @PathVariable final int commentId) {
@@ -106,5 +108,12 @@ public class CommentApiController {
     }
 
 
+    /**
+     *  댓글 상세정보 조회
+     */
+    @GetMapping("store/{store_ucSeq}/comments/{commentId}")
+    public CommentResponse findCommentById(@PathVariable final int store_ucSeq, @PathVariable final int commentId){
+        return commentService.findCommentById(commentId);
+    }
 
 }
