@@ -45,6 +45,15 @@ public class CommentApiController {
         System.out.println("content:" + content);
         System.out.println("store_ucSeq:" + store_ucSeq);
 
+
+
+        // 댓글 내용이 빈 문자열인지 확인
+        if (content == null || content.isEmpty()) {
+            System.out.println("내용이 비어 있습니다");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(0);
+        }
+
+
         // AOP 처리?
         // 사용자의 ID 가져오기
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -66,14 +75,14 @@ public class CommentApiController {
 
 
 
-        //1번 방법
+
+        //댓글 생성 1번 방법
         Member member = memberService.findByUserId(userId);
         //System.out.println("member:" + member);
         //Comment comment = new Comment(store_ucSeq, userId, content, member.getNickname());
         
-        //2번 방법
+        //댓글 생성 2번 방법
         Comment comment = new Comment(userId, store_ucSeq, content);
-
         int result = commentService.insertComment(comment);
 
         return ResponseEntity.ok(1);

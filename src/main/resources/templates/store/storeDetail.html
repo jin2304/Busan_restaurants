@@ -413,6 +413,15 @@ input[readonly], select[readonly], textarea[readonly], .readonly, input[disabled
         try {
             const content = document.getElementById('commentContent').value; // 댓글 내용 가져오기
             console.log("댓글 내용:", content);
+
+            // 댓글 내용이 빈 문자열인지 확인
+            if (!content) {
+                alert("댓글 내용을 입력해주세요.");
+                return; // 댓글 내용이 없으면 함수 종료
+            }
+
+
+
             const uri = "/store/" + storeId + "/comments";
             const response = await postCommentJson(uri, content); // 댓글 등록 요청
             console.log('댓글 response:', response);
