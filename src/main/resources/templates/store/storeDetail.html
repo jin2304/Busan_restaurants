@@ -315,6 +315,34 @@ input[readonly], select[readonly], textarea[readonly], .readonly, input[disabled
 
               <!-- 댓글 목록(렌더링 부분)-->
               <div id="commentsContainer">
+<!--                <div class="flex justify-between items-start gap-4 border-gray-300 dark:border-gray-700 p-4" style="border-bottom: 1px solid #ccc;">
+
+                  &lt;!&ndash; 프로필 이미지,댓글 내용,시간 왼쪽 배치 &ndash;&gt;
+                  <div class="flex items-start gap-4">
+                            <span class="relative flex shrink-0 overflow-hidden rounded-full w-10 h-10 border">
+                                <span class="writer_img">
+                                    <img src="https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzAzMjZfMjUx%2FMDAxNjc5ODM0MzkxNzg5.SomK3qflKEf0ugQ9HqeikVETiazukyq1aNgj767ZXMMg.d9xeVYIkSi5cL39Zv658_wFaZAWBjQSiApP9Dap3wdgg.PNG.npay1%2F20230326%25A3%25DF213901%25A3%25DF832.png&type=sc960_832" width="40" height="40" alt="기본 프로필 이미지">
+                                </span>
+                            </span>
+                    <div class="grid gap-1 text-sm text-gray-500 dark:text-gray-400">
+                      <h4 class="text-black font-bold">${comment.user_userId}</h4>
+                      <p class="text-sm text-black font-bold">${comment.content}</p>
+                      <div class="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
+                        <time>${comment.created_date}</time>
+                      </div>
+                    </div>
+                  </div>
+
+                  &lt;!&ndash; 수정/삭제 버튼 &ndash;&gt;
+                  <div>
+                    <button type="button" onclick="openCommentUpdatePopup(${comment.commentId});" class="inline-flex items-center justify-center text-gray-500 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground p-0">
+                      수정
+                    </button>
+                    <button type="button" onclick="deleteComment(${comment.commentId});" class="inline-flex items-center justify-center text-gray-500 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground p-0">
+                      삭제
+                    </button>
+                  </div>
+                </div>-->
               </div>
 
 
@@ -547,6 +575,72 @@ input[readonly], select[readonly], textarea[readonly], .readonly, input[disabled
                 document.getElementById('commentUpdateBtn').removeAttribute('onclick');
                 layerPopClose('commentUpdatePopup');
             }
+
+
+
+            // 댓글 수정
+            function updateComment(commentId) {
+
+                const writer = document.getElementById('modalWriter');
+                const content = document.getElementById('modalContent');
+                isValid(writer, '작성자');
+                isValid(content, '수정할 내용');
+
+                const ucSeq = [[ ${store.ucSeq} ]];
+
+                const params = {
+                    commentId : commentId,
+                    store_ucSeq : ucSeq,
+                    content : content.value,
+                    //writer : writer.value
+                }
+
+                $.ajax({
+                    url : `/store/${ucSeq}/comments/${commentId}`,
+                    type : 'patch',
+                    contentType : 'application/json; charset=utf-8',
+                    dataType : 'json',
+                    data : JSON.stringify(params),  //stringify() :JavaScript 객체나 배열을 JSON 형식의 문자열로 변환
+                    async : false,
+                    success : function (response) {
+                        alert('수정되었습니다.');
+                        closeCommentUpdatePopup();
+                        findAllComment(ucSeq);
+                    },
+                    error : function (request, status, error) {
+                        console.log(error)
+                    }
+                })
+            }
+
+
+            /**
+             * 한글 받침 유무를 판단하는 함수
+             * @param {string} str - 검사할 문자열
+             * @returns {boolean} - 받침이 있으면 true, 없으면 false
+             */
+            function hasCoda(str) {
+                const lastChar = str.charCodeAt(str.length - 1);
+                const coda = (lastChar - 0xAC00) % 28;
+                return coda !== 0;
+            }
+
+            /**
+             * 필드 유효성 검사 함수
+             * @param {HTMLElement} inputElement - 검사할 입력 요소
+             * @param {string} fieldName - 필드명
+             * @throws {Error} - 입력이 유효하지 않으면 오류를 발생시킴
+             */
+            function isValid(inputElement, fieldName) {
+                if (!inputElement.value.trim()) {
+                    const particle = hasCoda(fieldName) ? '을' : '를'; // 조사
+                    alert(`${fieldName}${particle} 입력해 주세요.`);
+                    inputElement.focus();
+                    throw new Error(`${fieldName} is required.`);
+                }
+            }
+
+
       </script>
 
 

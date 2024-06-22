@@ -1,6 +1,7 @@
 package com.web.store.dao.mybatis;
 
 import com.web.store.dao.CommentDao;
+import com.web.store.dto.Request.CommentRequest;
 import com.web.store.dto.Response.CommentResponse;
 import com.web.store.entity.Comment;
 import org.apache.ibatis.session.SqlSession;
@@ -39,6 +40,11 @@ public class MybatisCommentDao implements CommentDao {
     @Override
     public CommentResponse findCommentById(int commentId) {
         return mapper.findCommentById(commentId);
+    }
+
+    @Override
+    public int updateComment(CommentRequest params) {
+        return mapper.updateComment(params);
     }
 
 

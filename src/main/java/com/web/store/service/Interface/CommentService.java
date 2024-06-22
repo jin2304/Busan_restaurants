@@ -1,5 +1,6 @@
 package com.web.store.service.Interface;
 
+import com.web.store.dto.Request.CommentRequest;
 import com.web.store.dto.Response.CommentResponse;
 import com.web.store.entity.Comment;
 
@@ -13,4 +14,6 @@ public interface CommentService {
     int deleteComment(int commentId);
 
     CommentResponse findCommentById(int commentId);
+
+    int updateComment(CommentRequest params);
 }

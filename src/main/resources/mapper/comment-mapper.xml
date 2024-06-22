@@ -40,6 +40,16 @@
         commentId=#{commentId};
     </select>
 
+
+    <update id="updateComment" parameterType="com.web.store.dto.Request.CommentRequest">
+        UPDATE comment
+        SET
+        modified_date = NOW()
+        , content = #{content}
+        WHERE
+        commentId = #{commentId}
+    </update>
+
 </mapper>
 
 

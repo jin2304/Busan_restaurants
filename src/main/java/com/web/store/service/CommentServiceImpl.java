@@ -1,6 +1,7 @@
 package com.web.store.service;
 
 import com.web.store.dao.CommentDao;
+import com.web.store.dto.Request.CommentRequest;
 import com.web.store.dto.Response.CommentResponse;
 import com.web.store.entity.Comment;
 import com.web.store.service.Interface.CommentService;
@@ -38,5 +39,10 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public CommentResponse findCommentById(int commentId) {
         return commentDao.findCommentById(commentId);
+    }
+
+    @Override
+    public int updateComment(CommentRequest params) {
+        return commentDao.updateComment(params);
     }
 }

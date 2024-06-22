@@ -2,6 +2,7 @@ package com.web.store.controller;
 
 
 
+import com.web.store.dto.Request.CommentRequest;
 import com.web.store.dto.Response.CommentResponse;
 import com.web.store.entity.Member;
 import com.web.store.service.Interface.CommentService;
@@ -18,6 +19,17 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+
+
+
+/**
+ *
+ *  코드 작성자: 서진영(jin2304)
+ *  코드 설명 :CommentApiController는 맛집의 댓글과 관련된 기능을 담당하며, Rest API방식으로 설계했음.
+ *  코드 주요 기능: 댓글 등록, 댓글 조회, 댓글 삭제, 댓글 수정
+ *  코드 작성일: 2024.05.01 ~ 2024.06.22
+ *
+ */
 
 
 
@@ -124,5 +136,18 @@ public class CommentApiController {
     public CommentResponse findCommentById(@PathVariable final int store_ucSeq, @PathVariable final int commentId){
         return commentService.findCommentById(commentId);
     }
+
+
+    /**
+     *  댓글 수정
+     */
+    @PatchMapping("store/{store_ucSeq}/comments/{commentId}")
+    public CommentResponse updateComment(@PathVariable final int store_ucSeq,
+                                         @PathVariable final int commentId,
+                                         @RequestBody final CommentRequest params) {
+        commentService.updateComment(params);
+        return commentService.findCommentById(commentId);
+    }
+
 
 }
