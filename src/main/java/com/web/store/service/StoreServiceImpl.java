@@ -11,6 +11,7 @@ import com.web.store.service.Interface.StoreService;
 import com.web.store.utils.PageInfo;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -19,6 +20,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,59 +37,47 @@ public class StoreServiceImpl implements StoreService {
         //this.myBatisStore = myBatisStore;
     }
 
-/*    @Override
-    @Transactional(rollbackFor = {DuplicateKeyException.class, RuntimeException.class, SQLException.class})
-    public int insertStore(Store store) {
-        try {
-            return storeDao.insertStore(store);
-        } catch (DuplicateKeyException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to insert store", e);
+    //가게 전체 삽입(트랜잭션으로 처리) V2  -> @Transactional 통해 스프링이 자동으로 컨트롤러에 예외 전파
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public int insertStores(List<Store> stores) {
+        int count = 0;
+        for (Store store : stores) {
+            storeDao.insertStore(store);
+            count++;
         }
-    }*/
-
-    //DB 삽입
-/*    @Override
-    @Transactional(rollbackFor = {RuntimeException.class})
-    public int insertStore(Store store){
-        
-        
-        //중복 확인
-        if (isDuplicateStore(store)) {
-            throw new RuntimeException("중복된 가게입니다.");
-            //throw new IllegalStateException("이미 존재하는 가게입니다.");
-        }
-        return storeDao.insertStore(store);
-
-*//*        try {
-            return storeDao.insertStore(store);
-        } catch (DuplicateKeyException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to insert store", e);
-        }*//*
-
-
-    }*/
-
-
-    @Override
-    @Transactional(rollbackFor = {DuplicateKeyException.class, RuntimeException.class, SQLException.class})
-    //@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
-    public int insertStore(Store store) {
-        try {
-            return storeDao.insertStore(store);
-        }   catch (DuplicateKeyException e) {
-            // 중복 예외가 발생하면 롤백을 수행하고 해당 예외를 다시 던짐
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            throw e;
-        } catch (Exception e) {
-            // 중복된 값이 발생하면 롤백 수행
-            System.out.println("e = " + e);
-            throw new RuntimeException("Failed to insert store: " + e.getMessage(), e);
-        }
+        return count;
     }
+
+
+    //가게 전체 삽입(트랜잭션으로 처리) V1 -> 명시적으로 예외를 전파
+/*    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public int insertStores(List<Store> stores) {
+        int count = 0;
+        for (Store store : stores) {
+            try {
+                storeDao.insertStore(store);
+                count++;
+            } catch (DataAccessException e) {
+                throw e;  // 중복 예외 또는 기타 데이터 액세스 예외를 그대로 던짐
+                //throw new RuntimeException("Failed2 to insert store: " + e.getMessage(), e);
+            }
+        }
+        return count;
+    }*/
+
+
+
+    //가게 개별 삽입
+//    @Override
+//    public int insertStore(Store store) {
+//        try {
+//            return storeDao.insertStore(store);
+//        } catch (Exception e) {
+//            throw new RuntimeException("Failed to insert store: " + e.getMessage(), e);
+//        }
+//    }
+
+
 
     @Override
     public int selectListCount() {

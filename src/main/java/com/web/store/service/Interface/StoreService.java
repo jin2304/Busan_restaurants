@@ -12,8 +12,11 @@ import java.util.List;
 
 public interface StoreService {
 
-    //DB 삽입
-    int insertStore(Store store);
+    //가게 개별 삽입
+    //int insertStore(Store store);
+
+    //가게 전체 삽입
+    int insertStores(List<Store> stores);
 
     //전체 가게 개수 조회
     int selectListCount();

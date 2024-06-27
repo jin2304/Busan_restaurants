@@ -28,22 +28,25 @@ public class MyBatisStoreDao implements StoreDao {
         //세션을 통해 mapper 컨테이너에서 mapper 객체를 꺼내 씀
     }
 
-
-
+    //V2 -> 스프링을 통하여 예외를 자동 전파
     @Override
- /*   public int insertStore(Store store) {
+    public int insertStore(Store store) {
         return mapper.insertStore(store);
-    }*/
-
+    }
+    
+/*
+    //V1 -> 예외를 명시적으로 전파
+    @Override
     public int insertStore(Store store) {
         try {
             return mapper.insertStore(store);
         } catch (Exception e) {
-           // throw new DataAccessException("Failed to insert store: " + e.getMessage(), e);
-            System.err.println("Failed to insert store: " + e.getMessage());
-            return 0;
+            throw new DataAccessException("Failed to insert store: " + e.getMessage(), e) {};
         }
     }
+*/
+
+
 
     @Override
     public int selectListCount() {

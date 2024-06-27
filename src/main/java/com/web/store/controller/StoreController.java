@@ -13,6 +13,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -48,7 +49,7 @@ public class StoreController {
     @ResponseBody
     @RequestMapping(value = "/storeSave", produces = "application/json; charset=UTF-8")
     //@GetMapping("/storeList")
-    public ResponseEntity<String> store(Model model) throws JsonProcessingException {
+    public ResponseEntity<String> storeSave(Model model) throws JsonProcessingException {
     //public String store(Model model) throws JsonProcessingException {
 
         String url = "http://apis.data.go.kr/6260000/FoodService/getFoodKr";
@@ -80,8 +81,7 @@ public class StoreController {
 
             // 추출한 데이터를 처리하고 데이터베이스에 저장
             for (Object item : itemList) {
-                JSONObject foodItem = (JSONObject) item;
-
+                    JSONObject foodItem = (JSONObject) item;
 
                     // JSON 객체를 Store 객체로 변환
                     Store store = new Store(
@@ -98,29 +98,25 @@ public class StoreController {
                             ,Double.parseDouble(foodItem.get("LAT").toString())
                             ,Double.parseDouble(foodItem.get("LNG").toString())
                     );
-
                     stores.add(store);
                     //System.out.println("store = " + store);
-                    System.out.println();
-
-
-                    int result =  storeService.insertStore(store);
-                    if(result>0) {
-                        System.out.println("성공");
-                    } else {
-                        System.out.println("실패");
-                    }
-
-
                 }
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+                    int result = storeService.insertStores(stores); //DB에 가게 저장
+                    System.out.println("result: " + result);
+                    return ResponseEntity.ok().body(responseBody);
+
+                } catch (ParseException e) {
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to parse response.");
+                } catch (DataAccessException e) {
+                    return ResponseEntity.status(HttpStatus.CONFLICT).body("Duplicate store found!");
+                    //return ResponseEntity.status(HttpStatus.CONFLICT).body("Duplicate store found: " + e.getMessage());
+                } catch (Exception e) {
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
+                }
 
   /*      model.addAttribute("stores", stores);
-        return "store/storeList";*/
-            return ResponseEntity.ok()
-                    .body(responseBody);
+            return "store/storeList";*/
+
     }
 
 

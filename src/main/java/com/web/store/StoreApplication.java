@@ -13,7 +13,7 @@ import org.springframework.web.client.RestTemplate;
 import javax.sql.DataSource;
 
 @SpringBootApplication
-/*@EnableTransactionManagement*/
+@EnableTransactionManagement
 public class StoreApplication {
 
 	public static void main(String[] args) {
