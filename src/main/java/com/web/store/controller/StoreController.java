@@ -1,9 +1,6 @@
 package com.web.store.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.web.store.dto.BookmarkCheckDto;
-import com.web.store.dto.CustomUserDetails;
-import com.web.store.entity.Bookmark;
 import com.web.store.entity.Store;
 import com.web.store.service.Interface.StoreService;
 import com.web.store.utils.PageInfo;
@@ -16,9 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -45,12 +39,12 @@ public class StoreController {
 
 
 
-
+    /**
+     * API를 통하여 맛집 저장
+     */
     @ResponseBody
     @RequestMapping(value = "/storeSave", produces = "application/json; charset=UTF-8")
-    //@GetMapping("/storeList")
     public ResponseEntity<String> storeSave(Model model) throws JsonProcessingException {
-    //public String store(Model model) throws JsonProcessingException {
 
         String url = "http://apis.data.go.kr/6260000/FoodService/getFoodKr";
         url += "?serviceKey=" + serviceKey;
@@ -59,24 +53,15 @@ public class StoreController {
         url += "&pageNo=" + 1;
 
        ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class);
-
        String responseBody = responseEntity.getBody();
-       //System.out.println("responseBody = " + responseBody);
-
-//       String responseHeaders = responseEntity.getHeaders().toString();
-//       System.out.println("responseHeaders = " + responseHeaders);
-
-        
 
         //JSON 응답을 직접 파싱
         JSONParser parser = new JSONParser();
         List<Store> stores = new ArrayList<>();
-
         try {
             JSONObject jsonResponse = (JSONObject) parser.parse(responseBody);
             JSONObject getFoodKr = (JSONObject) jsonResponse.get("getFoodKr");
             JSONArray itemList = (JSONArray) getFoodKr.get("item");
-            //System.out.println("itemList = " + itemList);
 
 
             // 추출한 데이터를 처리하고 데이터베이스에 저장
@@ -113,53 +98,32 @@ public class StoreController {
                 } catch (Exception e) {
                     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
                 }
-
-  /*      model.addAttribute("stores", stores);
-            return "store/storeList";*/
-
     }
 
 
 
-    /** 맛집 목록 **/
+    /** 
+     *  맛집 목록 
+     */
     @GetMapping("/storeList")
     public String storeList(@RequestParam(value="cPage", defaultValue = "1")int currentPage, Model model){
-
+        //페이징 처리
         PageInfo pageInfo = Pagination.getPageInfo(storeService.selectListCount(), currentPage, 10, 16);
-        System.out.println("storeService.selectListCount() = " + storeService.selectListCount());
-
-        System.out.println("pageInfo.getCurrentPage() = " + pageInfo.getCurrentPage());
-
-
         model.addAttribute("pageInfo", pageInfo);
         model.addAttribute("stores",storeService.selectStoreList(pageInfo));
-
         return "store/storeList";
     }
 
 
-    /** 맛집 상세 정보 **/
+    /**
+     * 맛집 상세 정보
+     */
     @GetMapping("/storeDetail")
     public String storeDetail(@RequestParam("ucSeq")int ucSeq, Model model){
-        System.out.println("호출");
-
         Store store = storeService.selectStoreDetail(ucSeq);
-
         if(store!=null){
-            System.out.println("성공");
             model.addAttribute("store", store);
         }
-
         return "store/storeDetail";
     }
-
-
-
-    @GetMapping("/map")
-    public String testView(Model model){
-        return "store/map";
-    }
-
-
-
 }
