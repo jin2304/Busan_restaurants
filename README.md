@@ -6,6 +6,12 @@
 사용자에게 다양한 기능을 통해 부산의 맛집을 쉽게 찾고 즐길 수 있는 환경을 제공.
 
 
+![Untitled](https://github.com/user-attachments/assets/7b0a8554-d74e-4a13-bffb-ab707e3263ae)
+
+![Untitled (1)](https://github.com/user-attachments/assets/858dd257-df17-41d7-9c74-482de03d8cfe)
+
+
+
 
 ## 🗓 개발 기간
 24.02.01 - 24.06.27
